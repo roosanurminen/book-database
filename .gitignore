@@ -1,16 +1,21 @@
 # Node.js
 node_modules/
 
-# Build folders for frontend (Next.js)
-.next/
-out/
 build/
 
+# Vite
+dist
+dist-ssr
+*.local
+
 # Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
 
 # MacOS
 .DS_Store
@@ -18,12 +23,8 @@ yarn-error.log*
 # Environment files
 .env
 
-# Vercel (if you deploy)
-.vercel
-
-# testing
-/coverage
-
 # VS Code
 .vscode/
+!.vscode/extensions.json
 /.idea
+*.sw?
