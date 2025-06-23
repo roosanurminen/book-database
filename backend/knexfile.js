@@ -6,7 +6,7 @@ module.exports = {
   development: {
     client: 'pg',
     connection: {
-      host: 'database',
+      host: process.env.NODE_ENV === 'development' ? 'localhost' : 'database',
       port: 5432,
       database: process.env.POSTGRES_DB,
       user: process.env.POSTGRES_USER,

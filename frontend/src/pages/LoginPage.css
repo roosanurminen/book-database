@@ -1,0 +1,12 @@
+.container {
+    display: block;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+input {
+    display: block;
+    padding: 15px;
+    margin: 10px 0px;
+}

@@ -7,9 +7,9 @@ exports.seed = async function(knex) {
   await knex.raw('TRUNCATE TABLE missing_books_authors, missing_books, books_genres, books_authors, books, groups, genres, series, authors, users RESTART IDENTITY CASCADE');
 
   await knex('users').insert([
-    { user_name: 'Elli Epeli', email: 'elli@gmail.com', password: 'password' },
-    { user_name: 'Kalle Kamu', email: 'kalle@gmail.com', password: 'password' },
-    { user_name: 'Sulo Sulonen', email: 'sulo@gmail.com', password: 'password' },
+    { user_name: 'Elli Epeli', email: 'elli@gmail.com', password: '$2b$10$B6zeO0oz4ggqs5TugfJRZ.rz7voUWMLAvlaam2/gj7q8dA4VkPyP6' },
+    { user_name: 'Kalle Kamu', email: 'kalle@gmail.com', password: '$2b$10$B6zeO0oz4ggqs5TugfJRZ.rz7voUWMLAvlaam2/gj7q8dA4VkPyP6' },
+    { user_name: 'Sulo Sulonen', email: 'sulo@gmail.com', password: '$2b$10$B6zeO0oz4ggqs5TugfJRZ.rz7voUWMLAvlaam2/gj7q8dA4VkPyP6' },
   ]);
 
   await knex('authors').insert([

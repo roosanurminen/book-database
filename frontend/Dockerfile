@@ -7,4 +7,10 @@ ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
+# Delete this when production
 CMD ["npm", "run", "dev"]
+
+
+# Uncomment the following when production
+#FROM nginx:alpine
+#COPY --from=build /app/dist /usr/share/nginx/html
