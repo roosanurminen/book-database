@@ -4,13 +4,14 @@ const SearchBar = () => {
     const { searchValue, setSearchValue} = useState("");
 
     return (
-        <div className='container'>
+        <div className='searchbar'>
             <input
                 type='search'
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                placeholder='search'
+                placeholder='Hae...'
             />
+            <button className='search-button' type="submit">Hae</button>
         </div>
     )
 }

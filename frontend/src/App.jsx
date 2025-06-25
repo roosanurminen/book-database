@@ -8,6 +8,7 @@ import { AuthContextProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute';
 import { Navigate } from 'react-router-dom';
 import RegisterPage from './pages/RegisterPage';
+import NewBook from './pages/NewBookPage';
 
 function App() {
   return (
@@ -35,6 +36,14 @@ function App() {
             element={
               <ProtectedRoute access="authorized">
                 <HomePage /> 
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/add-new-book" 
+            element={
+              <ProtectedRoute access="authorized">
+                <NewBook /> 
               </ProtectedRoute>
             } 
           />

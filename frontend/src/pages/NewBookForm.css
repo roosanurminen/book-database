@@ -1,0 +1,43 @@
+
+
+.basic-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+.field {
+    display: grid;
+}
+
+.basic-info label {
+    margin-bottom: 0.25rem;
+}
+
+
+
+
+
+.series-info {
+    display: flex;
+    
+}
+
+.group-info {
+    display: flex;
+    
+}
+
+
+.details-info {
+    display: flex;
+    
+}
+
+
+.physical-info {
+    display: flex;
+    
+}
+
+

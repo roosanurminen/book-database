@@ -15,6 +15,7 @@ const LoginPage = () => {
         e.preventDefault();
         try {
             const requestBody = {email, password};
+            console.log(email, password);
             const response = await axios.post('http://localhost:5000/api/login', requestBody, {
                 withCredentials: true,
             });
@@ -29,26 +30,27 @@ const LoginPage = () => {
         }
     }
     return (
-        <div className='container'>
-            <div className='header'>
-                <div className='text'>Kirjatietokanta</div>
+        <div className='login-page'>
+            <h1 className='login-header'>Kirjahylly jutksa</h1>
+            <div className='login-container'>
+                <h3 className='login-form-title'>Kirjaudu sisään</h3>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type='email'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder='Sähköposti'
+                    />
+                    <input
+                        type='password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder='Salasana'
+                    />
+                    <button type="submit">Kirjaudu sisään</button>
+                </form>
+                <Link to="/register">Ei tunnuksia? Luo sellainen</Link>
             </div>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type='email'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder='Sähköposti'
-                />
-                <input
-                    type='password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder='Salasana'
-                />
-                <button type="submit">Kirjaudu sisään</button>
-            </form>
-             <Link to="/register">Ei tunnuksia? Luo sellainen</Link> 
         </div>
     )
 }
