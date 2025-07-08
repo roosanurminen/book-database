@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const db = require('./db');
+const db = require('../db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const authMiddleware = require('./authMiddleware');
+const authMiddleware = require('../authMiddleware');
 const path = require('path');
+const { addBook } = require('./addBook')
 
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
@@ -93,8 +94,8 @@ router.post('/api/refresh', (req, res) => {
 
 router.get('/api/check-auth', authMiddleware, async (req, res) => {
     try {
-        const user_id = req.user_id;
-        const user = await db('users').where('user_id', user_id).first();
+        const userId = req.user_id;
+        const user = await db('users').where('user_id', userId).first();
         res.json({
             authenticated: true,
             user: { user_name: user.user_name }
@@ -121,63 +122,56 @@ router.post('/api/logout', async (req, res) => {
     res.json({message: 'Logged out succesfully'});
 });
 
-// Edit book's data
-router.put('/edit-book-data', authMiddleware, async (req, res) => {
-    try {
-        const user_id = req.user_id;
-
-    } catch (err) {
-        console.error('Error editing book data: ', err);
-        res.status(500).json({error: 'Server error'})
-    }
-});
-
-// Delete existing book
-router.delete('/:bookId', authMiddleware, async (req, res) => {
-    try {
-        const user_id = req.user_id;
-        const bookId = req.params.bookId;
-
-    } catch (err) {
-        console.error('Error deleting book: ', err);
-        res.status(500).json({error: 'Server error'})
-    }
-});
-
 // Add new book
-router.post('/add-new-book', authMiddleware, async (req, res) => {
+router.post('/api/add-new-book', authMiddleware, addBook);
+ 
+
+// Get user data
+router.get('/api/profile', authMiddleware, async(req, res) => {
     try {
-        const user_id = req.user_id;
-        const {title, author, series } = req.body;
-
-    } catch (err) {
-        console.error('Error adding new book: ', err);
-        res.status(500).json({error: 'Server error'})
-    }
-}); 
-
-// Get books
-router.get('/', authMiddleware, async (req, res) => {
-    try {
-        const user_id = req.user_id;
-        
-
-    } catch (err) {
-        console.error('Error getting user books: ', err);
-        res.status(500).json({error: 'Server error'})
+        const userId = req.user_id;
+        const userData = await db('users').where('user_id', userId).first();
+        console.log(userData)
+        res.json({
+            username: userData.user_name,
+            email: userData.email});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error updating profile' });
     }
 });
 
-// Get specific book's data
-router.get('/book-data/:bookId', authMiddleware, async (req, res) => {
+// Update user data
+router.put('/api/profile', authMiddleware, async(req, res) => {
     try {
-        const user_id = req.user_id;
-        
-
-    } catch (err) {
-        console.error('Error getting book data: ', err);
-        res.status(500).json({error: 'Server error'})
+        const userId = req.user_id;
+        const {user_name} = req.body;
+        const result = await db('users').where('user_id', userId).update({
+            user_name,
+        });        
+        res.json({message: 'User data updated correctly'});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error updating profile' });
     }
 });
+
+
+// Get all books
+
+router.get('/api/books', authMiddleware, async(req, res) => {
+    try {
+        console.log("oolalaa")
+        const userId = req.user_id;
+        const usersBooks = await db('user_books_detail').where('user_id', userId);
+        console.log(usersBooks);        
+        res.json({message: 'User data updated correctly'});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error updating profile' });
+    }
+});
+
+
 
 module.exports = router;

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 
-const SearchBar = () => {
-    const { searchValue, setSearchValue} = useState("");
+const SearchBar = ({ category, handleSearch }) => {
+    const { searchValue, setSearchValue} = useState('');
+    
+
 
     return (
         <div className='searchbar'>
@@ -9,9 +11,20 @@ const SearchBar = () => {
                 type='search'
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                placeholder='Hae...'
+                placeholder={
+                    category === 'all' 
+                        ? 'Näytetään kaikki kirjasi'
+                        : category === 'author'
+                            ? 'Hae kirjailijan nimellä...'
+                            : category === 'title'
+                                ? 'Hae kirjan nimellä...'
+                                : category === 'series'
+                                    ? 'Hae sarjan nimellä...'
+                                    : 'Hae ryhmän nimellä...'
+                }
+                disabled={category === 'all'}
             />
-            <button className='search-button' type="submit">Hae</button>
+            <button className='search-button' type='submit' disabled={category==='all'} onClick={handleSearch}>Hae</button>
         </div>
     )
 }

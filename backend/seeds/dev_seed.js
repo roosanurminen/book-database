@@ -13,12 +13,12 @@ exports.seed = async function(knex) {
   ]);
 
   await knex('authors').insert([
-    { author_name: 'J.R.R. Tolkien' },
-    { author_name: 'Douglas Adams' },
-    { author_name: 'Donna Tartt' },
-    { author_name: 'Stieg Larsson' },
-    { author_name: 'James Herriot' },
-    { author_name: 'George R.R. Martin' },
+    { author_name: 'J.R.R. Tolkien', normalized_author: 'jrrtolkien' },
+    { author_name: 'Douglas Adams', normalized_author: 'douglasadams' },
+    { author_name: 'Donna Tartt', normalized_author: 'donnatartt' },
+    { author_name: 'Stieg Larsson', normalized_author: 'stieglarsson' },
+    { author_name: 'James Herriot', normalized_author: 'jamesherriot' },
+    { author_name: 'George R.R. Martin', normalized_author: 'georgerrmartin' },
   ]);
 
   await knex('series').insert([
@@ -30,19 +30,23 @@ exports.seed = async function(knex) {
   ]);
 
   await knex('genres').insert([
+    { genre_name: 'Dekkari' },
+    { genre_name: 'Dystopia' },
+    { genre_name: 'Elämäkerta / Muistelmat' },
+    { genre_name: 'Erotiikka' },
     { genre_name: 'Fantasia' },
-    { genre_name: 'Scifi' },
-    { genre_name: 'dekkari' },
-    { genre_name: 'romantiikka' },
+    { genre_name: 'Historia' },
     { genre_name: 'Huumori' },
     { genre_name: 'Jännitys' },
-    { genre_name: 'Nuoret' },
+    { genre_name: 'Kauhu' },
     { genre_name: 'Lapset' },
+    { genre_name: 'Nuoret' },
+    { genre_name: 'Psykologinen' },
+    { genre_name: 'Romantiikka' },
+    { genre_name: 'Scifi' },
     { genre_name: 'Sota' },
-    { genre_name: 'omaelämä' },
-    { genre_name: 'tietokirjallisuus' },
-    { genre_name: 'psykologinen' },
-    { genre_name: 'trilleri' },
+    { genre_name: 'Tietokirja' },
+    { genre_name: 'Trilleri' },
   ]);
 
   await knex('groups').insert([

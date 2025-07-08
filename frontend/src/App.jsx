@@ -2,18 +2,20 @@ import { useState } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
-//import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import { AuthContextProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute';
 import { Navigate } from 'react-router-dom';
 import RegisterPage from './pages/RegisterPage';
 import NewBook from './pages/NewBookPage';
+import ToastProvider from './components/ToastProvider';
+import Profile from './pages/ProfilePage';
 
 function App() {
   return (
     <Router>
       <AuthContextProvider>
+        <ToastProvider />
         <Routes>
           <Route 
             path="/register" 
@@ -44,6 +46,14 @@ function App() {
             element={
               <ProtectedRoute access="authorized">
                 <NewBook /> 
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute access="authorized">
+                <Profile /> 
               </ProtectedRoute>
             } 
           />

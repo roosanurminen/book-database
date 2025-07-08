@@ -15,7 +15,6 @@ const LoginPage = () => {
         e.preventDefault();
         try {
             const requestBody = {email, password};
-            console.log(email, password);
             const response = await axios.post('http://localhost:5000/api/login', requestBody, {
                 withCredentials: true,
             });

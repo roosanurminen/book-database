@@ -3,9 +3,9 @@ import { useAuth } from '../context/AuthContext';
 
 
 const ProtectedRoute = ({ children, access }) => {
-    const { authState } = useAuth();
+    const { authState, loading } = useAuth();
 
-    if (authState === null) {
+    if (loading) {
         return <div>Ladataan...</div>;
     }
 

@@ -6,10 +6,15 @@ import './SearchPanel.css';
 const SearchPanel = () => {
     const [category, setCategory] = useState('all');
 
+
+    const handleSearch = (e) => {
+        
+    }
+
     return (
         <div className='search-panel'>
            <Dropdown className='dropdown' value={category} onChange={setCategory} />
-           <SearchBar className='searchbar'/>
+           <SearchBar className='searchbar' category={category} handleSearch={handleSearch}/>
         </div>
     )
 }

@@ -32,7 +32,6 @@ export const AuthContextProvider = ({ children }) => {
         } catch (error) {
             try {
                 const refreshRes = await axios.post('http://localhost:5000/api/refresh', {}, {withCredentials: true});
-                
                 if (refreshRes) {
                     const authRes = await axios.get('http://localhost:5000/api/check-auth', { withCredentials: true });
                     setAuthState({

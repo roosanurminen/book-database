@@ -13,10 +13,11 @@ exports.up = function(knex) {
     .createTable('authors', function (table) {
         table.increments('author_id').primary();
         table.string('author_name', 200).notNullable();
+        table.string('normalized_author', 200).notNullable();
     })
     .createTable('series', function(table) {
         table.increments('series_id').primary();
-        table.string('series_name', 200).notNullable();
+        table.string('series_name', 200).notNullable().unique();
         table.integer('total_books').notNullable();
     })
     .createTable('genres', function(table) {
@@ -32,7 +33,7 @@ exports.up = function(knex) {
         table.integer('user_id').references('users.user_id');
         table.string('book_title', 200).notNullable();
         table.integer('series_id').references('series.series_id');
-        table.integer('series_part').notNullable();
+        table.integer('series_part');
         table.integer('group_id').references('groups.group_id');
 
         table.string('book_language', 50).notNullable();
