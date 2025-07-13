@@ -1,20 +1,123 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Dropdown from './Dropdown';
 import SearchBar from './SearchBar';
+import axios from 'axios';
 import './SearchPanel.css';
 
-const SearchPanel = () => {
+const SearchPanel = ({ setBooks }) => {
+
     const [category, setCategory] = useState('all');
+    const [searchValue, setSearchValue] = useState('');
+    const [options, setOptions] = useState([]);
 
+    const fetchSearch = async (value) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/search/${category}`, {
+                withCredentials: true,
+                params: {search: value}
+            });
 
-    const handleSearch = (e) => {
-        
+            setBooks(response.data);
+
+        } catch (error) {
+            console.log('fetchSearch', error);
+        }
+    }
+
+    const fetchMatchingData = async (value) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/search/${category}`, {
+                withCredentials: true,
+                params: {search: value}
+            });
+
+            const data = response.data;
+            let options = [];
+
+            if (category === 'title') {
+                options = data.map(opt => opt.book_title);
+            } else if (category === 'author') {
+                const input = value.toLowerCase();
+                const authorNames = [];
+
+                data.forEach(book => {
+                    const authors = book.author_names.split(',').map(name => name.trim());
+                    authors.forEach(author => {
+                        if (author.toLowerCase().includes(input)) {
+                            authorNames.push(author);
+                        }
+                    });
+                });
+                options = [...new Set(authorNames)];
+            } else if (category === 'series') {
+                const series = data.map(opt => opt.series_name);
+                options = [...new Set(series)]
+            } else if (category === 'group') {
+                const group = data.map(opt => opt.group_name)
+                options = [...new Set(group)]
+            }
+
+            setOptions(options);
+            
+
+        } catch (error) {
+            console.log('fetchMatchingData', error);
+        }
+    }
+
+    const handleInputChange = (value) => {
+        setSearchValue(value);
+        if (value !== '') {
+            fetchMatchingData(value);
+        } else {
+            setOptions([]);
+        }
+    }
+
+    const handleSearch = (value) => {
+        setSearchValue(value);      
+        fetchSearch(value);
+        setOptions([]);
+    };
+
+    useEffect(() => {
+        if (category === 'all') {
+            fetchSearch();
+        }
+    }, [category]);
+
+    const onCategoryChange = (value) => {
+        setCategory(value);
+        setSearchValue('');
+        setOptions([]);
     }
 
     return (
-        <div className='search-panel'>
-           <Dropdown className='dropdown' value={category} onChange={setCategory} />
-           <SearchBar className='searchbar' category={category} handleSearch={handleSearch}/>
+        <div className='search-container'>
+            <div className='search-panel'>
+                <Dropdown className='dropdown' 
+                    value={category} 
+                    onCategoryChange={onCategoryChange} 
+                />
+                <SearchBar className='searchbar' 
+                    category={category} 
+                    searchValue={searchValue} 
+                    setSearchValue={setSearchValue} 
+                    handleSearch={handleSearch} 
+                    handleInputChange={handleInputChange}
+                />
+            </div>
+            {options.length > 0 && (
+                <div className='search-results'>
+                    {options.map((value) => (
+                        <div
+                            key={value} className='search-option' onClick={() => handleSearch(value)}
+                        >
+                            {value} 
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }

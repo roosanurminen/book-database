@@ -1,9 +1,13 @@
+import './BookCard.css'
+
 const BookCard = ({ book }) => {
 
     return (
-        <div className='book-card'>
-            <h3>{book.title}</h3>
-            <p>{book.author}</p>
+        <div className='book-cards'>
+            <div className='book-card'>
+                <h3>{book.book_title}</h3>
+                <p>{book.author_names}</p>
+            </div>
         </div>
     )
 }

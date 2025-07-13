@@ -1,0 +1,17 @@
+.book-cards {
+    padding: 5px;
+    width: 100%;
+}
+
+.book-card {
+    color: #333;
+    font-family: Georgia, serif;
+    background: white;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    width: 100%;
+    max-width: 800px;
+}
+
+

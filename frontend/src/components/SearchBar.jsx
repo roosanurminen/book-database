@@ -1,16 +1,10 @@
-import { useState } from 'react';
-
-const SearchBar = ({ category, handleSearch }) => {
-    const { searchValue, setSearchValue} = useState('');
-    
-
-
+const SearchBar = ({ category, searchValue, handleInputChange, handleSearch }) => {    
     return (
         <div className='searchbar'>
             <input
                 type='search'
                 value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
+                onChange={(e) => handleInputChange(e.target.value)}
                 placeholder={
                     category === 'all' 
                         ? 'Näytetään kaikki kirjasi'
@@ -24,7 +18,7 @@ const SearchBar = ({ category, handleSearch }) => {
                 }
                 disabled={category === 'all'}
             />
-            <button className='search-button' type='submit' disabled={category==='all'} onClick={handleSearch}>Hae</button>
+            <button className='search-button' type='submit' disabled={category==='all'} onClick={() => handleSearch(searchValue)}>Hae</button>
         </div>
     )
 }

@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const authMiddleware = require('../authMiddleware');
 const path = require('path');
 const { addBook } = require('./addBook')
+const { getAllBooks, getBooksByTitle, getBooksByAuthor, getBooksBySeries, getBooksByGroup } = require('./search')
 
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
@@ -158,19 +159,34 @@ router.put('/api/profile', authMiddleware, async(req, res) => {
 
 
 // Get all books
-
 router.get('/api/books', authMiddleware, async(req, res) => {
     try {
         console.log("oolalaa")
         const userId = req.user_id;
         const usersBooks = await db('user_books_detail').where('user_id', userId);
         console.log(usersBooks);        
-        res.json({message: 'User data updated correctly'});
+        res.json(usersBooks);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error updating profile' });
     }
 });
+
+// Get all books
+router.get('/api/search/all', authMiddleware, getAllBooks);
+
+// Get books by title
+router.get('/api/search/title', authMiddleware, getBooksByTitle);
+
+// Get books by author
+router.get('/api/search/author', authMiddleware, getBooksByAuthor);
+
+// Get books by series
+router.get('/api/search/series', authMiddleware, getBooksBySeries);
+
+// Get books by group
+router.get('/api/search/group', authMiddleware, getBooksByGroup);
+
 
 
 

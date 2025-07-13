@@ -12,8 +12,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 25px;
 }
 
 .home-header {
     color: #333;
+}
+
+.books {
+    padding: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
