@@ -4,10 +4,8 @@ import SearchBar from './SearchBar';
 import axios from 'axios';
 import './SearchPanel.css';
 
-const SearchPanel = ({ setBooks }) => {
+const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchValue, setHasSearched  }) => {
 
-    const [category, setCategory] = useState('all');
-    const [searchValue, setSearchValue] = useState('');
     const [options, setOptions] = useState([]);
 
     const fetchSearch = async (value) => {
@@ -78,6 +76,7 @@ const SearchPanel = ({ setBooks }) => {
         setSearchValue(value);      
         fetchSearch(value);
         setOptions([]);
+        setHasSearched(true);
     };
 
     useEffect(() => {
@@ -90,6 +89,7 @@ const SearchPanel = ({ setBooks }) => {
         setCategory(value);
         setSearchValue('');
         setOptions([]);
+        setHasSearched(false);
     }
 
     return (

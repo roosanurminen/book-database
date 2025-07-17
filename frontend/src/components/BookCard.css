@@ -4,6 +4,12 @@
 }
 
 .book-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas: auto auto;
+    grid-template-areas: 
+        'title series'
+        'author author';
     color: #333;
     font-family: Georgia, serif;
     background: white;
@@ -14,4 +20,14 @@
     max-width: 800px;
 }
 
+.book-title {
+    grid-area: title;
+}
 
+.series-nro {
+    grid-area: series;
+}
+
+.book-card p {
+    grid-area: author;
+}

@@ -33,6 +33,7 @@ async function getBooksByAuthor (req, res) {
         const search = req.query.search;
 
         const authors = await db('user_books_detail').where('user_id', userId).andWhere('author_names', 'ilike', `%${search}%`);
+        console.log("authors", authors);
         res.json(authors);
     } catch (error) {
         console.error(error);

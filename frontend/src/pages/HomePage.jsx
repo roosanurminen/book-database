@@ -11,16 +11,31 @@ const HomePage = () => {
     //const user_name = authState.user?.user_name;
 
     const [books, setBooks] = useState([]);
+    const [category, setCategory] = useState('all');
+    const [searchValue, setSearchValue] = useState('');
+    const [hasSearched, setHasSearched] = useState(false);
 
     return (
         <div className='home-page'>
             <NavBar />
             {/*<h2 className='home-header'>Helloota {user_name}</h2>*/}
             <div className='search'>
-                <SearchPanel setBooks={setBooks}/>
+                <SearchPanel 
+                    setBooks={setBooks}
+                    category={category}
+                    setCategory={setCategory}
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                    setHasSearched={setHasSearched}
+                />
             </div>
             <div className='books'>
-                <BookList books={books}></BookList>
+                <BookList 
+                    books={books}
+                    category={category}
+                    searchValue={searchValue}
+                    hasSearched={hasSearched}
+                />
             </div>
             
         </div>
