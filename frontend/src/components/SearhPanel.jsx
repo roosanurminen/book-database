@@ -15,11 +15,40 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
                 params: {search: value}
             });
 
-            setBooks(response.data);
+            const data = response.data;
+
+            if (category === 'author') {
+                const input = normalize(value);
+                let author = input;
+
+                for (const book of data) {
+                    const normAuthors = book.norm_authors.split(',').map(name => name.trim());
+                    const authors = book.author_names.split(',').map(name => name.trim());
+
+                    normAuthors.forEach((norm, idx) => {
+                        if (norm.includes(input)) {
+                            author = authors[idx];
+                        }
+                    });
+                }
+                setBooks({ books: data, authorName: author });
+            } else {
+                setBooks({ books: data, authorName: '' });
+            }
 
         } catch (error) {
             console.log('fetchSearch', error);
         }
+    }
+
+    const normalize = (name) => {
+        return name
+            .replace(/\./g, '')
+            .replace(/\-/g, '')
+            .replace(/\'/g, '')
+            .replace(/\s+/g, '')
+            .toLowerCase()
+            .trim();
     }
 
     const fetchMatchingData = async (value) => {
@@ -35,14 +64,16 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
             if (category === 'title') {
                 options = data.map(opt => opt.book_title);
             } else if (category === 'author') {
-                const input = value.toLowerCase();
+                const input = normalize(value);
                 const authorNames = [];
 
                 data.forEach(book => {
+                    const normAuthors = book.norm_authors.split(',').map(name => name.trim());
                     const authors = book.author_names.split(',').map(name => name.trim());
-                    authors.forEach(author => {
-                        if (author.toLowerCase().includes(input)) {
-                            authorNames.push(author);
+
+                    normAuthors.forEach((normAuthors, idx) => {
+                        if (normAuthors.includes(input)) {
+                            authorNames.push(authors[idx]);
                         }
                     });
                 });

@@ -9,6 +9,7 @@ exports.up = function(knex) {
                 b.book_id, 
                 b.book_title,  
                 STRING_AGG(DISTINCT a.author_name, ', ') AS author_names,
+                STRING_AGG(DISTINCT a.normalized_author, ', ') AS norm_authors,
                 s.series_id,
                 s.series_name,
                 b.series_part,

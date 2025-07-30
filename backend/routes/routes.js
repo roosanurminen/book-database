@@ -132,7 +132,7 @@ router.get('/api/profile', authMiddleware, async(req, res) => {
     try {
         const userId = req.user_id;
         const userData = await db('users').where('user_id', userId).first();
-        console.log(userData)
+        //console.log(userData)
         res.json({
             username: userData.user_name,
             email: userData.email});
@@ -161,10 +161,9 @@ router.put('/api/profile', authMiddleware, async(req, res) => {
 // Get all books
 router.get('/api/books', authMiddleware, async(req, res) => {
     try {
-        console.log("oolalaa")
         const userId = req.user_id;
         const usersBooks = await db('user_books_detail').where('user_id', userId);
-        console.log(usersBooks);        
+        //console.log(usersBooks);        
         res.json(usersBooks);
     } catch (error) {
         console.error(error);
@@ -187,6 +186,20 @@ router.get('/api/search/series', authMiddleware, getBooksBySeries);
 // Get books by group
 router.get('/api/search/group', authMiddleware, getBooksByGroup);
 
+
+router.delete('/api/delete-book', authMiddleware, async(req, res) => {
+    try {
+        const {bookId} = req.body;
+
+        const deleteBook = await db('books').where('book_id', bookId).del();
+        console.log(deleteBook);        
+        res.json(deleteBook);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error deleting book' });
+    }
+});
 
 
 

@@ -48,12 +48,12 @@ exports.up = function(knex) {
         table.text('notes');
     })    
     .createTable('books_authors', function(table) {
-        table.integer('book_id').notNullable().references('books.book_id');
+        table.integer('book_id').notNullable().references('books.book_id').onDelete('CASCADE');
         table.integer('author_id').notNullable().references('authors.author_id');
         table.primary(['book_id', 'author_id']);
     })
     .createTable('books_genres', function(table) {
-        table.integer('book_id').notNullable().references('books.book_id');
+        table.integer('book_id').notNullable().references('books.book_id').onDelete('CASCADE');
         table.integer('genre_id').notNullable().references('genres.genre_id');
         table.primary(['book_id', 'genre_id']);
     })

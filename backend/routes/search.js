@@ -1,11 +1,11 @@
 const db = require('../db');
-
+const { normalizeAuthor } = require('./addBook')
 
 async function getAllBooks (req, res) {
     try {
         const userId = req.user_id;
         const usersBooks = await db('user_books_detail').where('user_id', userId);
-        console.log(usersBooks);        
+        //console.log(usersBooks);        
         res.json(usersBooks);
     } catch (error) {
         console.error(error);
@@ -26,14 +26,15 @@ async function getBooksByTitle (req, res) {
     }
 }
 
-
 async function getBooksByAuthor (req, res) {
     try {
         const userId = req.user_id;
         const search = req.query.search;
+        const normSearch = normalizeAuthor(search);
 
-        const authors = await db('user_books_detail').where('user_id', userId).andWhere('author_names', 'ilike', `%${search}%`);
-        console.log("authors", authors);
+        const authors = await db('user_books_detail').where('user_id', userId).andWhere('norm_authors', 'ilike', `%${normSearch}%`);
+                
+        console.log('authors', authors);
         res.json(authors);
     } catch (error) {
         console.error(error);

@@ -136,4 +136,4 @@ async function addBook (req, res) {
     }
 }
 
-module.exports = { addBook }
+module.exports = { addBook,  normalizeAuthor}
