@@ -38,7 +38,7 @@
 }
 
 
-.submit-btn {
+.profile-form .submit-btn {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
@@ -51,7 +51,7 @@
 }
 
 
-.submit-btn:disabled {
+.profile-form .submit-btn:disabled {
     width: 100%;
     padding: 12px;
     margin-top: 10px;

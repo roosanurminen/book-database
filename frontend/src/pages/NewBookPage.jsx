@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { useState } from 'react';
-import BookForm from './NewBookForm'
+import { useRef, useState, useEffect} from 'react';
+import BookForm from './BookForm'
 import './NewBookPage.css'
 import NavBar from '../components/NavBar';
 import { toast } from 'react-toastify';
 
 const NewBook = () => {
-      const [bookDetails, setBookDetails] = useState({
+    const [bookDetails, setBookDetails] = useState({
         title: '',
         authors: [''],
         seriesName: '',
@@ -27,6 +27,79 @@ const NewBook = () => {
 
     const [isSeriesChecked, setSeriesIsChecked] = useState(false);
     const [isGroupChecked, setGroupIsChecked] = useState(false);
+    const [options, setOptions] = useState([]);
+    const [activeField, setActiveField] = useState('');
+
+
+    let dropdownRef = useRef();
+    
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setOptions([]);
+                setActiveField('');
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+    }, [])
+
+
+    const normalize = (name) => {
+        return name
+            .replace(/\./g, '')
+            .replace(/\-/g, '')
+            .replace(/\'/g, '')
+            .replace(/\s+/g, '')
+            .toLowerCase()
+            .trim();
+    }
+
+    const fetchMatchingData = async (category, value) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/search/${category}`, {
+                withCredentials: true,
+                params: {search: value}
+            });
+
+            const data = response.data;
+            let options = [];
+
+            if (category === 'author') {
+                const input = normalize(value);
+                const authorNames = [];
+
+                data.forEach(book => {
+                    const normAuthors = book.norm_authors.split(',').map(name => name.trim());
+                    const authors = book.author_names.split(',').map(name => name.trim());
+
+                    normAuthors.forEach((normAuthors, idx) => {
+                        if (normAuthors.includes(input)) {
+                            authorNames.push(authors[idx]);
+                        }
+                    });
+                });
+                options = [...new Set(authorNames)];
+            } else if (category === 'series') {
+                const series = data.map(opt => opt.series_name);
+                options = [...new Set(series)]
+            } else if (category === 'group') {
+                const group = data.map(opt => opt.group_name)
+                options = [...new Set(group)]
+            }
+
+            setOptions(options);
+            
+
+        } catch (error) {
+            console.log('fetchMatchingData', error);
+        }
+    }
+
 
     const handleChange = async (e) => {
         const {name, value, id} = e.target;
@@ -41,12 +114,76 @@ const NewBook = () => {
                     authors: updatedAuthors
                 };
             });
+
+            if (value !== '') {
+                setActiveField('author-' + index);
+                await fetchMatchingData('author', value);
+            } else {
+                setActiveField('');
+            }
+        
+        } else if (name === 'seriesName') {
+            setBookDetails(prev => ({
+                ...prev,
+                [name]: value
+            }));
+
+            if (value !== '') {
+                setActiveField('series');
+                await fetchMatchingData('series', value);
+            } else {
+                setActiveField('');
+            }
+
+        } else if (name === 'group') {
+            setBookDetails(prev => ({
+                ...prev,
+                [name]: value
+            }));
+
+            if (value !== '') {
+                setActiveField('group');
+                await fetchMatchingData('group', value);
+            } else {
+                setActiveField('');
+            }
+
         } else {
+            setActiveField('');
             setBookDetails({
                 ...bookDetails,
                 [name]: value
             });
+            setOptions([]);
         }
+    }
+
+    const handleOptionSelect = async (option, field) => {
+        if (field.startsWith('author-')) {
+            const index = parseInt(field.split('-')[1], 10);
+            setBookDetails(prev => {
+                const updatedAuthors = [...prev.authors];
+                updatedAuthors[index] = option;
+                return {
+                    ...prev,
+                    authors: updatedAuthors
+                };
+            });
+        } else if (field === 'series') {
+            setBookDetails(prev => ({
+                ...prev,
+                seriesName: option
+            }));
+
+        } else if (field === 'group') {
+            setBookDetails(prev => ({
+                ...prev,
+                group: option
+            }));
+        }
+
+        setOptions([]);
+        setActiveField('');
     }
 
     const onSeriesChange = async (e) => {
@@ -166,6 +303,7 @@ const NewBook = () => {
             console.log('handlesubmit newbook err:', error);
         }
     }
+
     return (
         <div className='new-book-page'>
             <NavBar />
@@ -182,6 +320,10 @@ const NewBook = () => {
                     removeAuthorField={removeAuthorField}
                     handleGenreChange={handleGenreChange}
                     isFormValid={isFormValid}
+                    options={options}
+                    activeField={activeField}
+                    handleOptionSelect={handleOptionSelect}
+                    dropdownRef={dropdownRef}
                 />
             </div>
         </div>

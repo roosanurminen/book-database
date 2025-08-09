@@ -1,12 +1,16 @@
+* {
+    font-family: Georgia, serif;
+}
+
 .book-form {
     color: #333;
-    font-family: Georgia, serif;
     background: white;
     border-radius: 0.5rem;
     padding: 1rem;
     box-shadow: 0 10px 20px rgba(0,0,0,0.15);
     width: 100%;
     max-width: 800px;
+    margin-top: 15px;
 }
 
 .group {
@@ -20,6 +24,7 @@
 
 .book-form h3 {
     font-size: 1rem;
+    
 }
 
 .book-form label {
@@ -44,7 +49,31 @@
     font-size: 0.9rem;
     width: 100%;
     color: #333;
+}
+
+.book-form .option-dropdown {
+    background: white;
+    border: 1px solid #ccc;
+    width: 100%;
+    overflow-y: auto;
+    color: #333;
+    font-size: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     font-family: Georgia, serif;
+    padding: 2px;
+    border-radius: 0.4rem;
+    margin: 0px 0px;
+    max-height: 200px; 
+}
+
+
+.book-form .option {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.book-form .option:hover {
+    background-color: #F3F4F6;
 }
 
 .book-form .dropdown {
@@ -57,22 +86,27 @@
     cursor: pointer;
     width: 100%;
     color: #333;
-    font-family: Georgia, serif;
 }
 
-.submit-button {
+.submit-btn {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
     font-size: 1rem;
-    background-color: #4db8ff;
+    background-color: #99d1ff;
     color: white;
     border: none;
     border-radius: 0.4rem;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
-.submit-button:disabled {
+.submit-btn:hover {
+    background-color: #66b8ff;
+}
+
+
+.submit-btn:disabled {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
@@ -91,22 +125,32 @@
     padding: 5px;
     margin: 25px 0px;
     font-size: 1rem;
-    background-color: #4db8ff;
+    background-color: #99d1ff;
     color: white;
     border: none;
     border-radius: 0.4rem;
     cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.author-btn:hover {
+    background-color: #66b8ff;
 }
 
 .remove-btn {
     min-width: 2.5rem;
     padding: 5px;
     font-size: 1rem;
-    background-color: #d9534f;
+    background-color: #ff9999;
     color: white;
     border: none;
     border-radius: 0.4rem;
     cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.remove-btn:hover {
+    background-color: #ff6666;
 }
 
 .author-field {

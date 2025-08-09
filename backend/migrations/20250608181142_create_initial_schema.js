@@ -12,13 +12,16 @@ exports.up = function(knex) {
     })
     .createTable('authors', function (table) {
         table.increments('author_id').primary();
+        table.integer('user_id').references('users.user_id');
         table.string('author_name', 200).notNullable();
         table.string('normalized_author', 200).notNullable();
     })
     .createTable('series', function(table) {
         table.increments('series_id').primary();
-        table.string('series_name', 200).notNullable().unique();
+        table.integer('user_id').references('users.user_id');
+        table.string('series_name', 200).notNullable();
         table.integer('total_books').notNullable();
+        table.unique(['user_id', 'series_name']);
     })
     .createTable('genres', function(table) {
         table.increments('genre_id').primary();
@@ -26,7 +29,9 @@ exports.up = function(knex) {
     })
     .createTable('groups', function(table) {
         table.increments('group_id').primary();
-        table.string('group_name', 200).notNullable().unique();
+        table.integer('user_id').references('users.user_id');
+        table.string('group_name', 200).notNullable();
+        table.unique(['user_id', 'group_name']);
     })
     .createTable('books', function(table) {
         table.increments('book_id').primary();

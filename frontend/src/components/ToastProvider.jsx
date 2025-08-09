@@ -5,8 +5,9 @@ const ToastProvider = () => {
         <div>
             <ToastContainer
                 position="bottom-center"
-                autoClose={2000} // 2seconds
+                autoClose={1000} // 1seconds
                 theme="light"
+                hideProgressBar='true'
             />
         </div>
     )

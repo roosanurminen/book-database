@@ -6,7 +6,7 @@ import { useState } from 'react';
 import BookList from '../components/BookList';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
     const { authState } = useAuth();
@@ -17,9 +17,11 @@ const HomePage = () => {
     const [searchValue, setSearchValue] = useState('');
     const [hasSearched, setHasSearched] = useState(false);
     const [selectedBook, setSelectedBook] = useState(null);
+    const navigate = useNavigate();
 
-    const handleEdit = (book) => {
-
+    const handleEdit = async (book) => {
+        const bookId = book.book_id;
+        navigate(`/edit-book/${bookId}`)
     }
 
     const handleDelete = async (book) => {
@@ -31,7 +33,7 @@ const HomePage = () => {
             });
 
             setSelectedBook(null);
-            //DO THIS
+            
             setBooks(prev => ({
                 ...prev,
                 books: prev.books.filter(b => b.book_id !== bookId)

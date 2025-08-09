@@ -7,6 +7,8 @@ const authMiddleware = require('../authMiddleware');
 const path = require('path');
 const { addBook } = require('./addBook')
 const { getAllBooks, getBooksByTitle, getBooksByAuthor, getBooksBySeries, getBooksByGroup } = require('./search')
+const { editBook } = require('./editBook');
+const { deleteAuthorsWithoutBooks, deleteSeriesWithoutBooks, deleteGroupsWithoutBooks } = require('../utils/dbCleanup')
 
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
@@ -186,20 +188,66 @@ router.get('/api/search/series', authMiddleware, getBooksBySeries);
 // Get books by group
 router.get('/api/search/group', authMiddleware, getBooksByGroup);
 
-
+// Delete book
 router.delete('/api/delete-book', authMiddleware, async(req, res) => {
     try {
         const {bookId} = req.body;
+        
+        await db('books').where('book_id', bookId).del();
+        
+        await deleteAuthorsWithoutBooks();
+        await deleteSeriesWithoutBooks();
+        await deleteGroupsWithoutBooks();
 
-        const deleteBook = await db('books').where('book_id', bookId).del();
-        console.log(deleteBook);        
-        res.json(deleteBook);
+        res.json('Book deleted succesfully');
 
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error deleting book' });
     }
 });
+
+
+// Get book's data
+router.get('/api/edit-book', authMiddleware, async(req, res) => {
+    try {
+        const userId = req.user_id;
+        const bookId = req.query.bookId;
+
+        const bookData = await db('user_books_detail').where('user_id', userId).andWhere('book_id', bookId).first();
+        if (!bookData) {
+            return res.status(404).json({ message: 'Book not found or access denied' });
+        }
+
+        res.json({
+            title: bookData.book_title,
+            authors: bookData.author_names,
+            seriesName: bookData.series_name,
+            seriesPart: bookData.series_part,
+            seriesTotalBooks: bookData.total_books,
+            group: bookData.group_name,
+            releaseYear: bookData.release_date,
+            genres: bookData.genre_names,
+            bookType: bookData.book_type,
+            pages: bookData.page_count,
+            condition: bookData.book_condition,
+            coverType: bookData.book_cover_type,
+            edition: bookData.book_edition,
+            language: bookData.book_language,
+            isPerfect: bookData.is_perfect,
+            notes: bookData.notes
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error while retrieving book' });
+    }
+});
+
+
+// Update book data
+router.put('/api/edit-book', authMiddleware, editBook);
+    
+
 
 
 

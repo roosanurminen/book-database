@@ -10,6 +10,7 @@ import RegisterPage from './pages/RegisterPage';
 import NewBook from './pages/NewBookPage';
 import ToastProvider from './components/ToastProvider';
 import Profile from './pages/ProfilePage';
+import EditBookPage from './pages/EditBookPage';
 
 function App() {
   return (
@@ -54,6 +55,14 @@ function App() {
             element={
               <ProtectedRoute access="authorized">
                 <Profile /> 
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/edit-book/:bookId" 
+            element={
+              <ProtectedRoute access="authorized">
+                <EditBookPage /> 
               </ProtectedRoute>
             } 
           />

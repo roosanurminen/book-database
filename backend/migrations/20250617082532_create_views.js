@@ -12,6 +12,7 @@ exports.up = function(knex) {
                 STRING_AGG(DISTINCT a.normalized_author, ', ') AS norm_authors,
                 s.series_id,
                 s.series_name,
+                s.total_books,
                 b.series_part,
                 g.group_id,
                 g.group_name,
@@ -23,7 +24,8 @@ exports.up = function(knex) {
                 b.book_cover_type,
                 b.is_perfect,
                 b.notes,
-                b.book_edition
+                b.book_edition,
+                b.page_count
               FROM books AS b
               LEFT JOIN series AS s ON b.series_id = s.series_id
               LEFT JOIN groups AS g ON b.group_id = g.group_id
@@ -32,9 +34,9 @@ exports.up = function(knex) {
               LEFT JOIN books_genres AS bg ON b.book_id = bg.book_id
               LEFT JOIN genres AS ge ON bg.genre_id = ge.genre_id
               GROUP BY 
-                b.user_id, b.book_id, b.book_title, s.series_id, s.series_name, b.series_part, 
+                b.user_id, b.book_id, b.book_title, s.series_id, s.series_name, s.total_books, b.series_part, 
                 g.group_id, g.group_name, b.book_language, b.book_type, b.release_date, 
-                b.book_condition, b.book_cover_type, b.is_perfect, b.notes, b.book_edition;
+                b.book_condition, b.book_cover_type, b.is_perfect, b.notes, b.book_edition, b.page_count;
             `)
         .raw(`CREATE VIEW series_full AS
               SELECT 

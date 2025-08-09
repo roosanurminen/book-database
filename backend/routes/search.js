@@ -1,5 +1,5 @@
 const db = require('../db');
-const { normalizeAuthor } = require('./addBook')
+const {normalizeAuthor} =  require('../utils/fetchIds');
 
 async function getAllBooks (req, res) {
     try {
@@ -34,7 +34,7 @@ async function getBooksByAuthor (req, res) {
 
         const authors = await db('user_books_detail').where('user_id', userId).andWhere('norm_authors', 'ilike', `%${normSearch}%`);
                 
-        console.log('authors', authors);
+        //console.log('authors', authors);
         res.json(authors);
     } catch (error) {
         console.error(error);

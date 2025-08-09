@@ -1,9 +1,21 @@
 const db = require('../db');
 const { getAuthorIds, getSeriesId, getGroupId, getGenreIds } = require('../utils/fetchIds')
+const { deleteAuthorsWithoutBooks, deleteSeriesWithoutBooks, deleteGroupsWithoutBooks } = require('../utils/dbCleanup')
 
-async function addBook (req, res) {
+async function editBook(req, res) {
     try {
         const userId = req.user_id;
+        const bookId = req.query.bookId;
+
+        console.log(userId)
+        console.log(bookId)
+
+        // Check that user has that book
+        const isUsersBook = await db('books').where({ book_id: bookId, user_id: userId }).first();
+        if (!isUsersBook) {
+            return res.status(404).json({ message: 'Book not found or access denied' });
+        }
+
         const {
             title, 
             authors,
@@ -20,23 +32,22 @@ async function addBook (req, res) {
             edition,
             language,
             isPerfect,
-            notes 
+            notes
         } = req.body;
 
+  
         const authorIds = await getAuthorIds(userId, authors);
         const seriesId = await getSeriesId(userId, seriesName, seriesTotalBooks);
         const groupId = await getGroupId(userId, group);
         const genreIds = await getGenreIds(genres);
-        
+
         let actualSeriesPart = seriesPart;
-        
         if (seriesId === null) {
             actualSeriesPart = null;
         }
 
-        const [bookData] = await db('books').returning('book_id').insert({
-            user_id: userId,
-            book_title: title,
+        await db('books').where({ book_id: bookId, user_id: userId }).update({
+            book_title: title, 
             series_id: seriesId,
             series_part: actualSeriesPart,
             group_id: groupId,
@@ -48,29 +59,36 @@ async function addBook (req, res) {
             book_cover_type: coverType,
             book_edition: edition,
             is_perfect: isPerfect,
-            notes: notes
-        });        
-
+            notes: notes,
+        });
+        
+        await db('books_authors').where({book_id: bookId}).del();
         for (let authorId of authorIds) {
             await db('books_authors').insert({
-                book_id: bookData.book_id,
+                book_id: bookId,
                 author_id: authorId
             });
         }
 
+        await db('books_genres').where({ book_id: bookId }).del();
         for (let genreId of genreIds) {
             await db('books_genres').insert({
-                book_id: bookData.book_id,
+                book_id: bookId,
                 genre_id: genreId
             })
         }
 
-        res.json({message: 'Book added'});
+        await deleteAuthorsWithoutBooks();
+        await deleteSeriesWithoutBooks();
+        await deleteGroupsWithoutBooks();
+
+        res.json({ message: 'Book updated successfully' });
 
     } catch (err) {
-        console.error('Error adding new book: ', err);
-        res.status(500).json({error: 'Server error'})
+        console.error('Error updating book:', err);
+        res.status(500).json({error: 'Server error while updating book'});
     }
+
 }
 
-module.exports = { addBook }
+module.exports = { editBook }

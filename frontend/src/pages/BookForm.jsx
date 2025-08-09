@@ -1,4 +1,4 @@
-import './NewBookForm.css'
+import './BookForm.css'
 import Select from 'react-select';
 
 const allGenres = [
@@ -22,11 +22,14 @@ const allGenres = [
 ];
 
 
-
-const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, onSeriesChange, isGroupChecked, onGroupChange, addAuthorField, removeAuthorField, handleGenreChange, isFormValid}) => {
+const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, onSeriesChange, isGroupChecked, onGroupChange, addAuthorField, removeAuthorField, handleGenreChange, isFormValid, isEditMode=false, isFormEdited=false, options, activeField, handleOptionSelect, dropdownRef}) => {
     return (
         <form className='book-form' onSubmit={handleSubmit}>
-            <h1>Lisää uusi kirja</h1>
+            <h1> {isEditMode
+                    ? 'Muokkaa kirjan tietoja' 
+                    : 'Lisää uusi kirja'
+                }
+            </h1>
             <div className='group'>
                 <h3>Perustiedot</h3>
                 <div className='basic-group'>
@@ -39,6 +42,7 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                             value={bookDetails.title}
                             onChange={handleChange}
                             placeholder='Esim. Sormuksen ritarit'
+                            autoComplete='off'
                             required
                         />
                     </div>
@@ -53,8 +57,19 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     value={author}
                                     onChange={handleChange}
                                     placeholder='Esim. J.R.R. Tolkien'
+                                    autoComplete='off'
                                     required
                                 />
+                                {options.length > 0 && activeField === `author-${index}` && (
+                                    <div className='option-dropdown' ref={dropdownRef}>
+                                        {options.map((option) => (
+                                            <div
+                                                key={option} className='option' onClick={() => handleOptionSelect(option, `author-${index}`)}>
+                                                {option} 
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                                 {index !== 0 && (
                                     <button type='button' onClick={() => removeAuthorField(index)} className='remove-btn'>Poista</button>
                                 )}
@@ -108,8 +123,20 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     value={bookDetails.seriesName}
                                     onChange={handleChange}
                                     placeholder='Esim. Taru sormusten herrasta'
-                                    required={isSeriesChecked}
+                                    autoComplete='off'
+                                    required={Boolean(isSeriesChecked)}
+                                    
                                 />
+                                {options.length > 0 && activeField === 'series' && (
+                                    <div className='option-dropdown' ref={dropdownRef}>
+                                        {options.map((option) => (
+                                            <div
+                                                key={option} className='option' onClick={() => handleOptionSelect(option, 'series')}>
+                                                {option} 
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                             <div className='field'>
                                 <label htmlFor='part'>Sarjan osa</label>
@@ -123,7 +150,7 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     value={bookDetails.seriesPart}
                                     onChange={handleChange}
                                     placeholder='1'
-                                    required={isSeriesChecked}
+                                    required={Boolean(isSeriesChecked)}
                                 />
                             </div>
                             <div className='field'>
@@ -138,7 +165,7 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     value={bookDetails.seriesTotalBooks}
                                     onChange={handleChange}
                                     placeholder='1'
-                                    required={isSeriesChecked}
+                                    required={Boolean(isSeriesChecked)}
                                 />
                             </div>
                         </>
@@ -183,8 +210,19 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                             value={bookDetails.group}
                             onChange={handleChange}
                             placeholder='Esim. Keski-Maa'
-                            required={isGroupChecked}
+                            autoComplete='off'
+                            required={Boolean(isGroupChecked)}
                         />
+                        {options.length > 0 && activeField === 'group' && (
+                            <div className='option-dropdown' ref={dropdownRef}>
+                                {options.map((option) => (
+                                    <div
+                                        key={option} className='option' onClick={() => handleOptionSelect(option, 'group')}>
+                                        {option} 
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
@@ -253,6 +291,7 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                             value={bookDetails.language}
                             onChange={handleChange}
                             placeholder='Esim. Suomi'
+                            autoComplete='off'
                             required
                         />
                     </div>
@@ -358,12 +397,13 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                         : 'Valitse ensin täydellisyys'}
                             required={bookDetails.isPerfect !== 'true'}
                             disabled={bookDetails.isPerfect === 'true'}
+                            autoComplete='off'
                         />
                     </div>
                 </div>
             </div>
 
-            <button className='submit-button' type='submit' disabled={!isFormValid()}>Lisää kirja</button>
+            <button className='submit-btn' type='submit' disabled={!isFormEdited && isEditMode}>{isEditMode ? 'Tallenna muutokset' : 'Lisää kirja'}</button>
         </form>
     )
 }

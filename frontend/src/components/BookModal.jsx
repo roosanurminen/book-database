@@ -36,6 +36,7 @@ const BookModal = ({ book, onClose, handleEdit, handleDelete }) => {
                 <h4>Perustiedot:</h4>
                 <p>Kirjailija(t): {book.author_names}</p>
                 <p>Kieli: {book.book_language}</p>
+                <p>Sivumäärä: {book.page_count}</p>
                 <p>Julkaisuvuosi: {book.release_date}</p>
                 <p>Painos: {book.book_edition}</p>
                 <p>Kirjantyyppi: {book.book_type}</p>
