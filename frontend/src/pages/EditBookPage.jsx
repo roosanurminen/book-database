@@ -1,4 +1,4 @@
-import BookForm from './BookForm'
+import BookForm from '../components/BookForm'
 import NavBar from '../components/NavBar';
 import './EditBookPage.css'
 import { useEffect, useState, useRef } from 'react';

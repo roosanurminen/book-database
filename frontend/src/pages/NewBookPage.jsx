@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useRef, useState, useEffect} from 'react';
-import BookForm from './BookForm'
+import BookForm from '../components/BookForm'
 import './NewBookPage.css'
 import NavBar from '../components/NavBar';
 import { toast } from 'react-toastify';
