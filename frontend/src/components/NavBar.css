@@ -18,6 +18,8 @@ body {
     gap: 2rem;
     height: 60px;
     width: 100%;
+    position: fixed; 
+    top: 0;
 }
 
 .nav a {
@@ -59,7 +61,7 @@ body {
     display: none;
 }
 
- @media only screen and (max-width: 767px) {
+@media only screen and (max-width: 767px) {
     .desktop-nav-right {
         display: none;
     }
@@ -67,13 +69,40 @@ body {
     .hamburger-btn {
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
-        padding-top: 5px;
+        justify-content: center;
+        position: relative;
         margin-right: 1rem;
-        z-index: 10;
         width: 2rem;
-        height: 4vh;
-        gap: 2px;
+        height: 1.5rem;
+        cursor: pointer;
+    }
+
+    .burger {
+        width: 100%;
+        height: 0.2rem;
+        border-radius: 2px;
+        background-color: #d9d9d9;
+        transition: all 0.3s ease;
+        position: absolute;
+    }
+
+    .burger:nth-child(1) { top: 0; }
+    .burger:nth-child(2) { top: 50%; transform: translateY(-50%); }
+    .burger:nth-child(3) { bottom: 0; }
+
+    .hamburger-btn.open .burger:nth-child(1) {
+        transform: rotate(45deg) translateY(-50%);
+        top: 50%;
+    }
+
+    .hamburger-btn.open .burger:nth-child(2) {
+        width: 0%;
+        opacity: 0;
+    }
+
+    .hamburger-btn.open .burger:nth-child(3) {
+        transform: rotate(-45deg) translateY(-50%);
+        top: 50%;
     }
 
     .mobile-menu {
@@ -92,14 +121,6 @@ body {
         padding: 2rem;
     }
 
-    .burger {
-        width: 2rem;
-        height: 0.18rem;
-        border-radius: 10px;
-        background-color: #d9d9d9;
-        transform-origin: 1px;
-        transition: 0.3s;
-    }
 
     /*.nav button:active, .nav a:active {
         color:  #fff;

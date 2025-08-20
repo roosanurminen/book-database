@@ -22,12 +22,17 @@ const allGenres = [
 ];
 
 
-const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, onSeriesChange, isGroupChecked, onGroupChange, addAuthorField, removeAuthorField, handleGenreChange, isFormValid, isEditMode=false, isFormEdited=false, options, activeField, handleOptionSelect, dropdownRef}) => {
+const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, onSeriesChange, isGroupChecked, onGroupChange, addAuthorField, removeAuthorField, handleGenreChange, isFormValid, isEditMode=false, isFormEdited=false, options, activeField, handleOptionSelect, dropdownRef, isMissing=false, isClaimed=false}) => {
+    console.log("isClaimed", isClaimed)
     return (
         <form className='book-form' onSubmit={handleSubmit}>
             <h1> {isEditMode
                     ? 'Muokkaa kirjan tietoja' 
-                    : 'Lisää uusi kirja'
+                    : isMissing 
+                        ? 'Lisää puuttuva kirja'
+                        : isClaimed
+                            ? 'Lisää kokoelmaan' 
+                            : 'Lisää uusi kirja'
                 }
             </h1>
             <div className='group'>
@@ -227,182 +232,185 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                 )}
             </div>
 
+            {!isMissing && (
+                <>
+                    <div className='group'>
+                        <h3>Tarkemmat tiedot</h3>
+                        <div className='details-group'>
+                            <div className='field'>
+                                <label htmlFor='genres'>Tyylilaji</label>
+                                <Select 
+                                    classNamePrefix='dropdown'
+                                    inputId='genres'
+                                    options={allGenres}
+                                    value={allGenres.filter(option => bookDetails.genres.includes(option.value))}
+                                    onChange={handleGenreChange}
+                                    isMulti
+                                    required
+                                    placeholder=""
+                                >
+                                </Select>
+                            </div>
+                            <div className='field'>
+                                <label htmlFor='bookType'>Kirjantyyppi</label>
+                                <select 
+                                    className='dropdown'
+                                    name='bookType'
+                                    id='bookType'
+                                    value={bookDetails.bookType}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value=''></option>
+                                    <option value='Romaani'>Romaani</option>
+                                    <option value='Runot'>Runot</option>
+                                    <option value='Novelli'>Novelli</option>
+                                    <option value='Sarjakuva'>Sarjakuva</option>
+                                    <option value='Tietokirja'>Tietokirja</option>
+                                    <option value='Esseet'>Esseet</option>
+                                    <option value='Näytelmä'>Näytelmä</option>
+                                    <option value='Kuvakirja'>Kuvakirja</option>
+                                </select>
+                            </div>
+                            <div className='field'>
+                                <label htmlFor='releaseYear'>Julkaisuvuosi</label>
+                                <input
+                                    type='number'
+                                    name='releaseYear'
+                                    id='releaseYear'
+                                    min='0'
+                                    max='2100'
+                                    step='1'
+                                    inputMode='numeric'
+                                    value={bookDetails.releaseYear}
+                                    onChange={handleChange}
+                                    placeholder='Esim. 1950'
+                                    required
+                                />
+                            </div>
+                            <div className='field'>
+                                <label htmlFor='language'>Kieli</label>
+                                <input
+                                    type='text'
+                                    name='language'
+                                    id='language'
+                                    value={bookDetails.language}
+                                    onChange={handleChange}
+                                    placeholder='Esim. Suomi'
+                                    autoComplete='off'
+                                    required
+                                />
+                            </div>
+                            <div className='field'>
+                                <label htmlFor='pages'>Sivumäärä</label>
+                                <input
+                                    type='number'
+                                    name='pages'
+                                    id='pages'
+                                    min='0'
+                                    step='1'
+                                    inputMode='numeric'
+                                    value={bookDetails.pages}
+                                    onChange={handleChange}
+                                    placeholder='Esim. 300'
+                                    required
+                                />
+                            </div>
+                            <div className='field'>
+                                <label htmlFor='edition'>Painos</label>
+                                <input
+                                    type='number'
+                                    name='edition'
+                                    id='edition'
+                                    min='0'
+                                    step='1'
+                                    inputMode='numeric'
+                                    value={bookDetails.edition}
+                                    onChange={handleChange}
+                                    placeholder='Esim. 1'
+                                    required
+                                />
+                            </div>
+                        </div>
+                    </div>
 
-            <div className='group'>
-                <h3>Tarkemmat tiedot</h3>
-                <div className='details-group'>
-                    <div className='field'>
-                        <label htmlFor='genres'>Tyylilaji</label>
-                        <Select 
-                            classNamePrefix='dropdown'
-                            inputId='genres'
-                            options={allGenres}
-                            value={allGenres.filter(option => bookDetails.genres.includes(option.value))}
-                            onChange={handleGenreChange}
-                            isMulti
-                            required
-                            placeholder=""
-                        >
-                        </Select>
-                    </div>
-                    <div className='field'>
-                        <label htmlFor='bookType'>Kirjantyyppi</label>
-                        <select 
-                            className='dropdown'
-                            name='bookType'
-                            id='bookType'
-                            value={bookDetails.bookType}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value=''></option>
-                            <option value='Romaani'>Romaani</option>
-                            <option value='Runot'>Runot</option>
-                            <option value='Novelli'>Novelli</option>
-                            <option value='Sarjakuva'>Sarjakuva</option>
-                            <option value='Tietokirja'>Tietokirja</option>
-                            <option value='Esseet'>Esseet</option>
-                            <option value='Näytelmä'>Näytelmä</option>
-                            <option value='Kuvakirja'>Kuvakirja</option>
-                        </select>
-                    </div>
-                     <div className='field'>
-                        <label htmlFor='releaseYear'>Julkaisuvuosi</label>
-                        <input
-                            type='number'
-                            name='releaseYear'
-                            id='releaseYear'
-                            min='0'
-                            max='2100'
-                            step='1'
-                            inputMode='numeric'
-                            value={bookDetails.releaseYear}
-                            onChange={handleChange}
-                            placeholder='Esim. 1950'
-                            required
-                        />
-                    </div>
-                    <div className='field'>
-                        <label htmlFor='language'>Kieli</label>
-                        <input
-                            type='text'
-                            name='language'
-                            id='language'
-                            value={bookDetails.language}
-                            onChange={handleChange}
-                            placeholder='Esim. Suomi'
-                            autoComplete='off'
-                            required
-                        />
-                    </div>
-                    <div className='field'>
-                        <label htmlFor='pages'>Sivumäärä</label>
-                        <input
-                            type='number'
-                            name='pages'
-                            id='pages'
-                            min='0'
-                            step='1'
-                            inputMode='numeric'
-                            value={bookDetails.pages}
-                            onChange={handleChange}
-                            placeholder='Esim. 300'
-                            required
-                        />
-                    </div>
-                    <div className='field'>
-                        <label htmlFor='edition'>Painos</label>
-                        <input
-                            type='number'
-                            name='edition'
-                            id='edition'
-                            min='0'
-                            step='1'
-                            inputMode='numeric'
-                            value={bookDetails.edition}
-                            onChange={handleChange}
-                            placeholder='Esim. 1'
-                            required
-                        />
-                    </div>
-                </div>
-            </div>
 
-
-            <div className='group'>
-                <h3>Kirjan ulkonäkö</h3>
-                <div className='physical-group'>
-                    <div className='field'>
-                        <label htmlFor='coverType'>Kansityyppi</label>
-                        <select 
-                            className='dropdown' 
-                            name='coverType'
-                            id='coverType'
-                            value={bookDetails.coverType}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value=''></option>
-                            <option value='Kovakantinen'>Kovakantinen</option>
-                            <option value='Pehmeäkantinen'>Pehmeäkantinen</option>
-                            <option value='Pokkari'>Pokkari</option>
-                        </select>
+                    <div className='group'>
+                        <h3>Kirjan ulkonäkö</h3>
+                        <div className='physical-group'>
+                            <div className='field'>
+                                <label htmlFor='coverType'>Kansityyppi</label>
+                                <select 
+                                    className='dropdown' 
+                                    name='coverType'
+                                    id='coverType'
+                                    value={bookDetails.coverType}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value=''></option>
+                                    <option value='Kovakantinen'>Kovakantinen</option>
+                                    <option value='Pehmeäkantinen'>Pehmeäkantinen</option>
+                                    <option value='Pokkari'>Pokkari</option>
+                                </select>
+                            </div>
+                            <div className='field'>
+                                <label htmlFor='condition'>Kunto</label>
+                                <select 
+                                    className='dropdown' 
+                                    name='condition'
+                                    id='condition'
+                                    value={bookDetails.condition}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value=''></option>
+                                    <option value='Uusi'>Uusi</option>
+                                    <option value='Erinomainen'>Erinomainen</option>
+                                    <option value='Hyvä'>Hyvä</option>
+                                    <option value='Tyydyttävä'>Tyydyttävä</option>
+                                    <option value='Heikko'>Heikko</option>                    
+                                </select>
+                            </div>
+                            <div className='field'>
+                                <label htmlFor='isPerfect'>Täydellinen</label>
+                                <select 
+                                    className='dropdown' 
+                                    name='isPerfect'
+                                    id='isPerfect'
+                                    value={bookDetails.isPerfect}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value=''></option>
+                                    <option value='true'>Kyllä</option>
+                                    <option value='false'>Ei</option>
+                                </select>
+                            </div>
+                            <div className='field'>
+                                <label htmlFor='notes'>Huomiot</label>
+                                <input
+                                    type='text'
+                                    name='notes'
+                                    id='notes'
+                                    value={bookDetails.notes}
+                                    onChange={handleChange}
+                                    placeholder={
+                                        bookDetails.isPerfect === 'true' 
+                                            ? 'Ei huomioita'
+                                            : bookDetails.isPerfect === 'false'
+                                                ? 'Esim. Kansipaperit puuttuu'
+                                                : 'Valitse ensin täydellisyys'}
+                                    required={bookDetails.isPerfect !== 'true'}
+                                    disabled={bookDetails.isPerfect === 'true'}
+                                    autoComplete='off'
+                                />
+                            </div>
+                        </div>
                     </div>
-                    <div className='field'>
-                        <label htmlFor='condition'>Kunto</label>
-                        <select 
-                            className='dropdown' 
-                            name='condition'
-                            id='condition'
-                            value={bookDetails.condition}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value=''></option>
-                            <option value='Uusi'>Uusi</option>
-                            <option value='Erinomainen'>Erinomainen</option>
-                            <option value='Hyvä'>Hyvä</option>
-                            <option value='Tyydyttävä'>Tyydyttävä</option>
-                            <option value='Heikko'>Heikko</option>                    
-                        </select>
-                    </div>
-                    <div className='field'>
-                        <label htmlFor='isPerfect'>Täydellinen</label>
-                        <select 
-                            className='dropdown' 
-                            name='isPerfect'
-                            id='isPerfect'
-                            value={bookDetails.isPerfect}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value=''></option>
-                            <option value='true'>Kyllä</option>
-                            <option value='false'>Ei</option>
-                        </select>
-                    </div>
-                    <div className='field'>
-                        <label htmlFor='notes'>Huomiot</label>
-                        <input
-                            type='text'
-                            name='notes'
-                            id='notes'
-                            value={bookDetails.notes}
-                            onChange={handleChange}
-                            placeholder={
-                                bookDetails.isPerfect === 'true' 
-                                    ? 'Ei huomioita'
-                                    : bookDetails.isPerfect === 'false'
-                                        ? 'Esim. Kansipaperit puuttuu'
-                                        : 'Valitse ensin täydellisyys'}
-                            required={bookDetails.isPerfect !== 'true'}
-                            disabled={bookDetails.isPerfect === 'true'}
-                            autoComplete='off'
-                        />
-                    </div>
-                </div>
-            </div>
-
+                </>
+            )}
+            
             <button className='submit-btn' type='submit' disabled={!isFormEdited && isEditMode}>{isEditMode ? 'Tallenna muutokset' : 'Lisää kirja'}</button>
         </form>
     )

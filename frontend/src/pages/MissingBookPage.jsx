@@ -5,31 +5,20 @@ import './NewBookPage.css'
 import NavBar from '../components/NavBar';
 import { toast } from 'react-toastify';
 
-const NewBookPage = () => {
+const MissingBookPage = () => {
     const [bookDetails, setBookDetails] = useState({
         title: '',
         authors: [''],
         seriesName: '',
         seriesPart: '',
         seriesTotalBooks: '',
-        group: '',
-        releaseYear: '',
-        genres: [],
-        bookType: '',
-        pages: '',
-        condition: '',
-        coverType: '',
-        edition: '',
-        language: '',
-        isPerfect: '',
-        notes: ''
+        group: ''
     });
 
     const [isSeriesChecked, setSeriesIsChecked] = useState(false);
     const [isGroupChecked, setGroupIsChecked] = useState(false);
     const [options, setOptions] = useState([]);
     const [activeField, setActiveField] = useState('');
-
 
     let dropdownRef = useRef();
     
@@ -212,14 +201,6 @@ const NewBookPage = () => {
         });
     }
 
-    const handleGenreChange = async (selectedValues) => {
-        const selectedGenres = selectedValues.map(option => option.value);
-        setBookDetails(prev => ({
-            ...prev,
-            genres: selectedGenres
-        }));
-    }
-
     const clearForm = () => {
         setBookDetails({
                 title: '',
@@ -227,17 +208,7 @@ const NewBookPage = () => {
                 seriesName: '',
                 seriesPart: '',
                 seriesTotalBooks: '',
-                group: '',
-                releaseYear: '',
-                genres: [],
-                bookType: '',
-                pages: '',
-                condition: '',
-                coverType: '',
-                edition: '',
-                language: '',
-                isPerfect: '',
-                notes: ''
+                group: ''
         });
             
         setSeriesIsChecked(false);
@@ -248,30 +219,11 @@ const NewBookPage = () => {
         const {
             title,
             authors,
-            releaseYear,
-            language,
-            pages,
-            edition,
-            genres,
-            bookType,
-            condition,
-            coverType,
-            isPerfect,
-            notes
         } = bookDetails;
 
         const required = (
             title.trim() &&
-            authors.every(author => author.trim()) &&
-            releaseYear &&
-            language.trim() &&
-            pages &&
-            edition &&
-            genres.length > 0 &&
-            bookType &&
-            condition &&
-            coverType &&
-            isPerfect
+            authors.every(author => author.trim())
         );
         
         const seriesRequired = !isSeriesChecked || (
@@ -282,17 +234,20 @@ const NewBookPage = () => {
 
         const groupRequired = !isGroupChecked || bookDetails.group.trim();
 
-        const notesRequired = isPerfect === 'true' || notes.trim();
-
-        return required && seriesRequired && groupRequired && notesRequired;
+        return required && seriesRequired && groupRequired;
     }
+
+    /*const handleGenreChange = async () => {
+        
+    }*/
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            //const requestBody = bookDetails;
+            const requestBody = bookDetails;
 
-            const response = await axios.post('http://localhost:5000/api/add-new-book', bookDetails, {
+            const response = await axios.post('http://localhost:5000/api/add-missing-book', requestBody, {
                 withCredentials: true,
             });
             toast.success('Kirja lisätty!');
@@ -318,16 +273,17 @@ const NewBookPage = () => {
                     onGroupChange={onGroupChange} 
                     addAuthorField={addAuthorField}
                     removeAuthorField={removeAuthorField}
-                    handleGenreChange={handleGenreChange}
+                    //handleGenreChange={handleGenreChange}
                     isFormValid={isFormValid}
                     options={options}
                     activeField={activeField}
                     handleOptionSelect={handleOptionSelect}
                     dropdownRef={dropdownRef}
+                    isMissing={true}
                 />
             </div>
         </div>
     )
 }
 
-export default NewBookPage;
+export default MissingBookPage;

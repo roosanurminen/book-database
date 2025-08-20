@@ -8,6 +8,36 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
 
     const [options, setOptions] = useState([]);
 
+    const isSeriesFull = async (value) => {
+        try {
+            
+            const response = await axios.get(`http://localhost:5000/api/series-full/${category}`, {
+                withCredentials: true,
+                params: {search: value}
+            });
+
+            return response.data;
+
+        } catch (error) {
+             console.log('isSeriesFull', error);
+        }
+
+    }
+
+    const missingBooks = async (value) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/missing/${category}`, {
+                withCredentials: true,
+                params: {search: value}
+            });
+
+            return response.data;
+
+        } catch (error) {
+             console.log('isSeriesFull', error);
+        }
+    }
+
     const fetchSearch = async (value) => {
         try {
             const response = await axios.get(`http://localhost:5000/api/search/${category}`, {
@@ -20,7 +50,10 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
             if (category === 'author') {
                 const input = normalize(value);
                 let author = input;
+                const seriesArray = await isSeriesFull(value);
+                const mbooksArray = await missingBooks(value);
 
+                console.log("missing:", mbooksArray)
                 for (const book of data) {
                     const normAuthors = book.norm_authors.split(',').map(name => name.trim());
                     const authors = book.author_names.split(',').map(name => name.trim());
@@ -31,9 +64,15 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
                         }
                     });
                 }
-                setBooks({ books: data, authorName: author });
+                setBooks({ books: data, authorName: author, seriesFull: seriesArray, missingBooks: mbooksArray});
+            } else if (category === 'series' || category === 'group') {
+                const seriesArray = await isSeriesFull(value);
+                const mbooksArray = await missingBooks(value);
+
+                console.log("missing:", mbooksArray)
+                setBooks({ books: data, authorName: '', seriesFull: seriesArray, missingBooks: mbooksArray});
             } else {
-                setBooks({ books: data, authorName: '' });
+                setBooks({ books: data, authorName: '', seriesFull: [], missingBooks: [] });
             }
 
         } catch (error) {
@@ -111,7 +150,7 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
     };
 
     useEffect(() => {
-        if (category === 'all') {
+        if (category === 'all' || category === 'missing') {
             fetchSearch();
         }
     }, [category]);

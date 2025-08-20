@@ -1,7 +1,15 @@
+body {
+    margin: 0;
+}
+
 .new-book-container {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     background-color: #F3F4F6;
+
+    margin-top: 0; /* Remove the gap */
+    padding: 80px 1rem 2rem
+
 }

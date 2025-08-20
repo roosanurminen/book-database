@@ -63,17 +63,17 @@ exports.up = function(knex) {
         table.primary(['book_id', 'genre_id']);
     })
     .createTable('missing_books', function(table) {
-        table.increments('mbook_id').primary();
+        table.increments('book_id').primary();
         table.integer('user_id').references('users.user_id');
-        table.string('mbook_title', 200).notNullable();
+        table.string('book_title', 200).notNullable();
         table.integer('series_id').references('series.series_id');
-        table.integer('series_part').notNullable();
+        table.integer('series_part');
         table.integer('group_id').references('groups.group_id');
     })    
     .createTable('missing_books_authors', function(table) {
-        table.integer('mbook_id').notNullable().references('missing_books.mbook_id');
-        table.integer('author_id').notNullable().references('authors.author_id');
-        table.primary(['mbook_id', 'author_id']);
+        table.integer('book_id').notNullable().references('missing_books.book_id').onDelete('CASCADE');;
+        table.integer('author_id').notNullable().references('authors.author_id').onDelete('CASCADE');;
+        table.primary(['book_id', 'author_id']);
     });
 };
 

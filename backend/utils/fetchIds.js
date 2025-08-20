@@ -36,9 +36,10 @@ async function getSeriesId(userId, seriesName, seriesTotalBooks) {
 
     const seriesExist = await db('series').where({series_name: seriesName, user_id: userId}).first();
     if (!seriesExist) {
-        const [seriesData] = await db('series').returning('series_id').insert({series_name: seriesName, total_books: seriesTotalBooks});
+        const [seriesData] = await db('series').returning('series_id').insert({user_id: userId, series_name: seriesName, total_books: seriesTotalBooks});
         return seriesData.series_id;
     } else {
+        await db('series').where({ series_id: seriesExist.series_id }).update({user_id: userId, series_name: seriesName, total_books: seriesTotalBooks})
         return seriesExist.series_id
     }
 }

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
@@ -7,10 +6,12 @@ import { AuthContextProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute';
 import { Navigate } from 'react-router-dom';
 import RegisterPage from './pages/RegisterPage';
-import NewBook from './pages/NewBookPage';
+import NewBookPage from './pages/NewBookPage';
 import ToastProvider from './components/ToastProvider';
 import Profile from './pages/ProfilePage';
 import EditBookPage from './pages/EditBookPage';
+import MissingBookPage from './pages/MissingBookPage';
+import ClaimBookPage from './pages/ClaimBookPage';
 
 function App() {
   return (
@@ -46,7 +47,7 @@ function App() {
             path="/add-new-book" 
             element={
               <ProtectedRoute access="authorized">
-                <NewBook /> 
+                <NewBookPage /> 
               </ProtectedRoute>
             } 
           />
@@ -63,6 +64,22 @@ function App() {
             element={
               <ProtectedRoute access="authorized">
                 <EditBookPage /> 
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/add-missing-book" 
+            element={
+              <ProtectedRoute access="authorized">
+                <MissingBookPage /> 
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/claim-book/:bookId" 
+            element={
+              <ProtectedRoute access="authorized">
+                <ClaimBookPage /> 
               </ProtectedRoute>
             } 
           />

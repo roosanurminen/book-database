@@ -156,21 +156,21 @@ exports.seed = async function(knex) {
   ]);
 
   await knex('missing_books').insert([
-    { user_id: 1, mbook_title: 'Maailmanlopun ravintola', series_id: 2, series_part: 2, group_id: null },
-    { user_id: 1, mbook_title: 'Elämä, maailmankaikkeus – ja kaikki', series_id: 2, series_part: 3, group_id: null },
-    { user_id: 1, mbook_title: 'Terve, ja kiitos kaloista', series_id: 2, series_part: 4, group_id: null },
-    { user_id: 1, mbook_title: 'Enimmäkseen harmiton', series_id: 2, series_part: 5, group_id: null },
-    { user_id: 2, mbook_title: 'Kuninkaan paluu', series_id: 3, series_part: 3, group_id: null },
-    { user_id: 2, mbook_title: 'Tyttö joka leikki tulella', series_id: 5, series_part: 2, group_id: 2 },
-    { user_id: 3, mbook_title: 'Jumalat juhlivat öisin', series_id: null, series_part: 0, group_id: null },
+    { user_id: 1, book_title: 'Maailmanlopun ravintola', series_id: 2, series_part: 2, group_id: null },
+    { user_id: 1, book_title: 'Elämä, maailmankaikkeus – ja kaikki', series_id: 2, series_part: 3, group_id: null },
+    { user_id: 1, book_title: 'Terve, ja kiitos kaloista', series_id: 2, series_part: 4, group_id: null },
+    { user_id: 1, book_title: 'Enimmäkseen harmiton', series_id: 2, series_part: 5, group_id: null },
+    { user_id: 2, book_title: 'Kuninkaan paluu', series_id: 3, series_part: 3, group_id: null },
+    { user_id: 2, book_title: 'Tyttö joka leikki tulella', series_id: 5, series_part: 2, group_id: 2 },
+    { user_id: 3, book_title: 'Jumalat juhlivat öisin', series_id: null, series_part: 0, group_id: null },
   ]);
 
   await knex('missing_books_authors').insert([
-    { mbook_id: 1, author_id: 2 },
-    { mbook_id: 2, author_id: 2 },
-    { mbook_id: 3, author_id: 2 },
-    { mbook_id: 4, author_id: 2 },
-    { mbook_id: 5, author_id: 4 },
-    { mbook_id: 6, author_id: 6 },
+    { book_id: 1, author_id: 2 },
+    { book_id: 2, author_id: 2 },
+    { book_id: 3, author_id: 2 },
+    { book_id: 4, author_id: 2 },
+    { book_id: 5, author_id: 4 },
+    { book_id: 6, author_id: 6 },
   ]);
 };

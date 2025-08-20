@@ -14,11 +14,13 @@ const SearchBar = ({ category, searchValue, handleInputChange, handleSearch }) =
                                 ? 'Hae kirjan nimellä...'
                                 : category === 'series'
                                     ? 'Hae sarjan nimellä...'
-                                    : 'Hae ryhmän nimellä...'
+                                    : category === 'group'
+                                        ? 'Hae ryhmän nimellä...'
+                                        : 'Näytetään puuttuvat kirjasi'
                 }
-                disabled={category === 'all'}
+                disabled={category === 'all' || category === 'missing'}
             />
-            <button className='search-button' type='submit' disabled={category==='all'} onClick={() => handleSearch(searchValue)}>Hae</button>
+            <button className='search-button' type='submit' disabled={category==='all' || category === 'missing'} onClick={() => handleSearch(searchValue)}>Hae</button>
         </div>
     )
 }

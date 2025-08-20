@@ -43,7 +43,9 @@ exports.up = function(knex) {
                 b.user_id, 
                 s.series_id, 
                 s.series_name, 
-                s.total_books, 
+                s.total_books,
+                STRING_AGG(DISTINCT a.author_name, ', ') AS author_names,
+                g.group_name,
                 COUNT(DISTINCT b.book_id) AS owned_parts,
               CASE WHEN COUNT(DISTINCT b.book_id) = s.total_books 
                 THEN true
@@ -52,7 +54,31 @@ exports.up = function(knex) {
               END AS is_full
               FROM books AS b
               JOIN series AS s ON b.series_id = s.series_id
-              GROUP BY b.user_id, s.series_id, s.series_name, s.total_books;
+              JOIN books_authors AS ba ON b.book_id = ba.book_id
+              JOIN authors AS a ON ba.author_id = a.author_id
+              LEFT JOIN groups AS g ON b.group_id = g.group_id
+              GROUP BY b.user_id, s.series_id, s.series_name, s.total_books, g.group_name;
+            `)
+        .raw(`CREATE VIEW user_missing_books AS
+              SELECT 
+                mb.user_id,
+                mb.book_id, 
+                mb.book_title,  
+                STRING_AGG(DISTINCT a.author_name, ', ') AS author_names,
+                s.series_id,
+                s.series_name,
+                s.total_books,
+                mb.series_part,
+                g.group_id,
+                g.group_name
+              FROM missing_books AS mb
+              LEFT JOIN series AS s ON mb.series_id = s.series_id
+              LEFT JOIN groups AS g ON mb.group_id = g.group_id
+              JOIN missing_books_authors AS mba ON mb.book_id = mba.book_id
+              JOIN authors AS a ON mba.author_id = a.author_id
+              GROUP BY 
+                mb.user_id, mb.book_id, mb.book_title, s.series_id, s.series_name, s.total_books, mb.series_part, 
+                g.group_id, g.group_name;
             `)
 };
 

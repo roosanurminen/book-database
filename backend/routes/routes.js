@@ -5,10 +5,13 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authMiddleware = require('../authMiddleware');
 const path = require('path');
-const { addBook } = require('./addBook')
-const { getAllBooks, getBooksByTitle, getBooksByAuthor, getBooksBySeries, getBooksByGroup } = require('./search')
+const { addBook } = require('./addNewBook')
+const { getAllBooks, getBooksByTitle, getBooksByAuthor, getBooksBySeries, getBooksByGroup, getAllMissingBooks } = require('./search')
 const { editBook } = require('./editBook');
 const { deleteAuthorsWithoutBooks, deleteSeriesWithoutBooks, deleteGroupsWithoutBooks } = require('../utils/dbCleanup')
+const { addMissingBook } = require('./addMissingBook');
+const { getAuthorsSeries, getSeries, getGroupsSeries } = require('./seriesFull')
+const { getMissingByAuthor, getMissingBySeries, getMissingByGroup } = require('./getMissingBooks');
 
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
@@ -188,6 +191,21 @@ router.get('/api/search/series', authMiddleware, getBooksBySeries);
 // Get books by group
 router.get('/api/search/group', authMiddleware, getBooksByGroup);
 
+// Get all missing books
+router.get('/api/search/missing', authMiddleware, getAllMissingBooks);
+
+// Get missing books by author
+router.get('/api/missing/author', authMiddleware, getMissingByAuthor);
+
+// Get missing books by series
+router.get('/api/missing/series', authMiddleware, getMissingBySeries);
+
+// Get missing books by group
+router.get('/api/missing/group', authMiddleware, getMissingByGroup);
+
+
+
+
 // Delete book
 router.delete('/api/delete-book', authMiddleware, async(req, res) => {
     try {
@@ -247,7 +265,64 @@ router.get('/api/edit-book', authMiddleware, async(req, res) => {
 // Update book data
 router.put('/api/edit-book', authMiddleware, editBook);
     
+// Add missing book
+router.post('/api/add-missing-book', authMiddleware, addMissingBook);
 
+// Get claiming books data
+router.get('/api/claim-book', authMiddleware, async(req, res) => {
+    try {
+        const userId = req.user_id;
+        const bookId = req.query.bookId;
+
+        const bookData = await db('user_missing_books').where('user_id', userId).andWhere('book_id', bookId).first();
+        if (!bookData) {
+            return res.status(404).json({ message: 'Book not found or access denied' });
+        }
+
+        console.log(bookData.series_name)
+
+        res.json({
+            title: bookData.book_title,
+            authors: bookData.author_names,
+            seriesName: bookData.series_name,
+            seriesPart: bookData.series_part,
+            seriesTotalBooks: bookData.total_books,
+            group: bookData.group_name
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error while retrieving book' });
+    }
+});
+
+
+// Delete missing book when claimed
+router.delete('/api/delete-missing', authMiddleware, async(req, res) => {
+    try {
+        const userId = req.user_id;
+        const bookId = req.query.bookId || req.body.bookId;
+
+        const isUsersBook = await db('missing_books').where('user_id', userId).andWhere('book_id', bookId).first();
+        if (!isUsersBook) {
+            return res.status(404).json({ message: 'Book not found or access denied' });
+        }
+
+        await db('missing_books').where('book_id', bookId).del();
+        res.json('Book deleted succesfully');
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error deleting book' });
+    }
+})
+
+// Get are authors series full
+router.get('/api/series-full/author', authMiddleware, getAuthorsSeries);
+
+// Get is the series full
+router.get('/api/series-full/series', authMiddleware, getSeries);
+
+// Get are groups series full
+router.get('/api/series-full/group', authMiddleware, getGroupsSeries);
 
 
 

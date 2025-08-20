@@ -1,6 +1,19 @@
+.search-container {
+    display: flex;
+    justify-content: center;  
+    padding: 1rem;
+    margin-top: 80px;
+    flex-direction: column;         
+}
+
+
 .search-panel {
     display: flex;
     gap: 1rem;
+    align-items: center;   
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .search-panel .dropdown {
@@ -12,6 +25,7 @@
     color: #333;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    flex: 0 0 150px;
 }
 
 .searchbar {
@@ -30,12 +44,12 @@
     color: #333;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     font-family: Georgia, serif;
+    flex: 1;
 }
 
 .search-button {
     padding: 10px;
     font-size: 1rem;
-    background-color: #4db8ff;
     color: white;
     border: none;
     border-radius: 0.4rem;
@@ -43,21 +57,22 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     flex-shrink: 0; 
     width: auto;
+    flex: 0 0 auto;
+    background-color: #99d1ff;
+    transition: background-color 0.2s ease;
 }
-
 
 .search-button:disabled {
-    padding: 10px;
-    font-size: 1rem;
     background-color: #f5f5f5;
     color: #999;
-    border: none;
-    border-radius: 0.4rem;
     cursor: not-allowed;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    flex-shrink: 0; 
-    width: auto;
 }
+
+
+.search-button:hover {
+  background-color: #66b8ff;
+}
+
 
 .search-results {
     background: white;
@@ -81,4 +96,44 @@
 
 .search-option:hover {
     background-color: #F3F4F6;
+}
+
+@media only screen and (max-width: 767px) {
+    .search-panel {
+        flex-direction: column; /* stack vertically */
+        align-items: stretch;   /* full width */
+        gap: 0.5rem;
+        padding: 0 1rem;
+    }
+
+    .searchbar {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .search-panel .dropdown {
+        flex: none;
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 6px;
+    }
+
+    .searchbar input {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 8px;
+        flex: none;
+    }
+
+    .search-button, .search-button:disabled {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        border: none;
+    }
+
+    .search-button:active {
+        background-color: #66b8ff;
+    }
+
 }

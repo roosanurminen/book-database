@@ -1,5 +1,4 @@
-.book-list {
-    padding: 5px;
+.book-list { 
     width: 100%;
     display: flex;
     justify-content: center;
@@ -8,8 +7,57 @@
 .book-list-content {
     width: 100%;
     max-width: 800px;
+    padding: 0 16px;
 }
 
-.book-list-content h2, .book-list-content h3 {
+.book-list-header h2 {
     margin-bottom: 20px;
+    color: #333;
+    font-family: Georgia, serif;
+    font-size: 1.5rem;
+}
+
+.book-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.series {
+    margin-bottom: 15px;
+    padding: 6px 12px;
+    font-family: Georgia, serif;
+    font-size: 1.2rem;
+    color: #333;
+    display: inline-block;
+}
+
+.ready {
+    background-color: #4caf50; 
+    color: white;
+    font-size: 0.75em;
+    padding: 2px 6px;
+    border-radius: 12px;
+    margin-left: 8px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+
+
+
+
+ @media only screen and (max-width: 767px) {
+    .book-list-header {
+        flex-direction: column; 
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .book-list-content {
+        padding: 0 12px;
+    }
+    
+    .book-list-header h2 {
+        font-size: 1.1rem;
+    }
 }

@@ -69,5 +69,18 @@ async function getBooksByGroup (req, res) {
     }
 }
 
+async function getAllMissingBooks(req, res) {
+    try {
+        const userId = req.user_id;
+        const missingBooks = await db('user_missing_books').where('user_id', userId);
+        console.log("helloo")
+        res.json(missingBooks);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
 
-module.exports = { getAllBooks, getBooksByTitle, getBooksByAuthor, getBooksBySeries, getBooksByGroup }
+
+
+module.exports = { getAllBooks, getBooksByTitle, getBooksByAuthor, getBooksBySeries, getBooksByGroup, getAllMissingBooks }

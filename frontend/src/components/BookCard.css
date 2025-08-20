@@ -8,11 +8,6 @@
 
 .book-card {
     display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-areas: auto auto;
-    grid-template-areas: 
-        'title series'
-        'author author';
     color: #333;
     font-family: Georgia, serif;
     background: #fff;
@@ -25,13 +20,19 @@
 }
 
 .book-title {
-    grid-area: title;
+    font-size: 1rem;
+    align-items: baseline;
+    font-weight: 600;
+    gap: 0.3rem;     
+    
 }
 
 .series-nro {
-    grid-area: series;
+    font-size: 0.9rem; 
+    font-weight: 400;
+    padding: 0 0.3rem;    
 }
 
 .book-card p {
-    grid-area: author;
+    font-size: 0.9rem;
 }

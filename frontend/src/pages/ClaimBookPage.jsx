@@ -1,11 +1,15 @@
-import axios from 'axios';
-import { useRef, useState, useEffect} from 'react';
 import BookForm from '../components/BookForm'
-import './NewBookPage.css'
 import NavBar from '../components/NavBar';
+import { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
-const NewBookPage = () => {
+
+const ClaimBookPage = () => {
+    const { bookId } = useParams();
+    const navigate = useNavigate();
     const [bookDetails, setBookDetails] = useState({
         title: '',
         authors: [''],
@@ -29,8 +33,7 @@ const NewBookPage = () => {
     const [isGroupChecked, setGroupIsChecked] = useState(false);
     const [options, setOptions] = useState([]);
     const [activeField, setActiveField] = useState('');
-
-
+    
     let dropdownRef = useRef();
     
     useEffect(() => {
@@ -46,18 +49,60 @@ const NewBookPage = () => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         }
-    }, [])
+    }, []);
 
 
-    const normalize = (name) => {
-        return name
-            .replace(/\./g, '')
-            .replace(/\-/g, '')
-            .replace(/\'/g, '')
-            .replace(/\s+/g, '')
-            .toLowerCase()
-            .trim();
-    }
+
+    useEffect(() => {
+        const getBookData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/api/claim-book?bookId=${bookId}`, {
+                    withCredentials: true
+                });
+
+                console.log(response.data.seriesName)
+
+                const data = {
+                    title: response.data.title,
+                    authors: response.data.authors
+                            ? response.data.authors.split(',').map(a => a.trim())
+                            : [''],
+                    seriesName: response.data.seriesName || '',
+                    seriesPart: response.data.seriesPart || '',
+                    seriesTotalBooks: response.data.seriesTotalBooks || '',
+                    group: response.data.group || '',
+                    releaseYear: '',
+                    genres: [],
+                    bookType: '',
+                    pages: '',
+                    condition: '',
+                    coverType: '',
+                    edition: '',
+                    language: '',
+                    isPerfect: '',
+                    notes: ''
+                };
+
+                setBookDetails(data);
+                //setOriginalBookDetails(data);
+
+                if (data.seriesName !== '') {
+                    setSeriesIsChecked(true)
+                }
+
+                if (data.group !== '') {
+                    setGroupIsChecked(true)
+                }
+                
+            } catch (error) {
+                console.log("hahhaaa", error);
+            }
+        }
+        getBookData();
+    }, []);
+
+
+
 
     const fetchMatchingData = async (category, value) => {
         try {
@@ -98,6 +143,16 @@ const NewBookPage = () => {
         } catch (error) {
             console.log('fetchMatchingData', error);
         }
+    }
+
+    const normalize = (name) => {
+        return name
+            .replace(/\./g, '')
+            .replace(/\-/g, '')
+            .replace(/\'/g, '')
+            .replace(/\s+/g, '')
+            .toLowerCase()
+            .trim();
     }
 
 
@@ -188,10 +243,26 @@ const NewBookPage = () => {
 
     const onSeriesChange = async (e) => {
         setSeriesIsChecked(!isSeriesChecked);
+
+        if (!isSeriesChecked === false) {
+            setBookDetails(prev => ({
+                ...prev,
+                seriesName: '',
+                seriesPart: '',
+                seriesTotalBooks: ''
+            }));
+        }
     }
 
     const onGroupChange = async (e) => {
         setGroupIsChecked(!isGroupChecked);
+
+        if (!isGroupChecked === false) {
+            setBookDetails(prev => ({
+                ...prev,
+                group: ''            
+            }));
+        }
     }
 
     const addAuthorField = async (e) => {
@@ -218,30 +289,6 @@ const NewBookPage = () => {
             ...prev,
             genres: selectedGenres
         }));
-    }
-
-    const clearForm = () => {
-        setBookDetails({
-                title: '',
-                authors: [''],
-                seriesName: '',
-                seriesPart: '',
-                seriesTotalBooks: '',
-                group: '',
-                releaseYear: '',
-                genres: [],
-                bookType: '',
-                pages: '',
-                condition: '',
-                coverType: '',
-                edition: '',
-                language: '',
-                isPerfect: '',
-                notes: ''
-        });
-            
-        setSeriesIsChecked(false);
-        setGroupIsChecked(false);
     }
 
     const isFormValid = () => {
@@ -290,14 +337,16 @@ const NewBookPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            //const requestBody = bookDetails;
-
             const response = await axios.post('http://localhost:5000/api/add-new-book', bookDetails, {
                 withCredentials: true,
             });
-            toast.success('Kirja lisätty!');
 
-            clearForm();
+            const deleteMissing = await axios.delete(`http://localhost:5000/api/delete-missing?bookId=${bookId}`, {
+                withCredentials: true,
+            })
+
+            toast.success('Kirja lisätty!');
+            navigate('/');
 
         } catch (error) {
             console.log('handlesubmit newbook err:', error);
@@ -324,10 +373,11 @@ const NewBookPage = () => {
                     activeField={activeField}
                     handleOptionSelect={handleOptionSelect}
                     dropdownRef={dropdownRef}
+                    isClaimed={true}
                 />
             </div>
         </div>
-    )
+    );
 }
 
-export default NewBookPage;
+export default ClaimBookPage;
