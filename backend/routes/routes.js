@@ -30,7 +30,11 @@ router.post('/api/register', async (req, res) => {
         res.status(200).json({message: 'Added user'});
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error' });
+        if (err.code === '23505') {
+            res.status(400).json({ message: 'Sähköposti on jo käytössä' });
+        } else {
+            res.status(500).json({ error: 'Server error' });
+        }
     }
 });
 

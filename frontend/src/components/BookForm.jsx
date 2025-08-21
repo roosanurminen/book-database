@@ -76,14 +76,14 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     </div>
                                 )}
                                 {index !== 0 && (
-                                    <button type='button' onClick={() => removeAuthorField(index)} className='remove-btn'>Poista</button>
+                                    <button type='button' onClick={() => removeAuthorField(index)} className='remove-btn'>-</button>
                                 )}
                         </div>
                     ))}
                         {(bookDetails.authors).length < 5 && (
                             <div className='field'>
-                            <button className='author-btn' type='button' onClick={addAuthorField}>+</button>
-                        </div>
+                                <button className='author-btn' type='button' onClick={addAuthorField}>+</button>
+                            </div>
                         )}
                     
                 </div>

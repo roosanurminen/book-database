@@ -7,10 +7,11 @@
 .register-page {
     display: flex;
     align-items: center;
-    justify-content: center;
+    flex-direction: column;
     min-height: 100vh;
     background-color: #F3F4F6;
     font-family: Georgia, serif;
+    padding: 20px;
 }
 
 .register-container {
@@ -21,17 +22,35 @@
     width: 100%;
     max-width: 400px;
     text-align: center;
+    margin-bottom: 20px;
 }
 
-.register-form-title {
-    font-size: 1.3rem;
+.register-header {
+    margin-bottom: 10px;
+    padding-top: 40px;
+    font-size: 2rem;
     color: #333;
-    margin-bottom: 1.5rem;
+    font-size: 2.6rem;
+    font-weight: bold;
+}
+
+.register-desc {
+    font-style: italic;
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 50px;
+}
+
+
+.register-form-title {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 2rem;
 }
 
 .register-page input {
     display: block;
-    padding: 20px;
+    padding: 16px 20px;
     margin: 20px 0px;
     border: 1px solid #ccc;
     border-radius: 0.4rem;
@@ -45,17 +64,60 @@
     padding: 12px;
     margin-top: 10px;
     font-size: 1rem;
-    background-color: #4db8ff;
+    background-color: #99d1ff;
     color: white;
     border: none;
     border-radius: 0.4rem;
     cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.register-page button:hover {
+    background-color: #66b8ff;
+}
+
+
+.register-page input.input-error {
+    border: 1px solid #ff6666;
+}
+
+.error-p {
+    color: #ff6666;
+    font-size: 0.85rem;
+    text-align: left;
+    margin-top: -15px;
+    margin-bottom: 10px;
 }
 
 
  @media only screen and (max-width: 600px) {
     .register-container {
         padding: 1.5rem;
-        max-width: 90%;
     }
+
+    .register-header {
+        font-size: 2rem;
+    }
+
+    .register-desc {
+        font-size: 1rem;
+    }
+
+
+    .register-form-title {
+        font-size: 1.2rem;
+    }
+
+    .register-page input {
+        font-size: 0.85rem;
+    }
+
+    .register-page button {
+        font-size: 0.85rem;
+    }
+
+    .register-page button:active, .register-page button:focus {
+        background-color: #66b8ff;
+    }
+
 }

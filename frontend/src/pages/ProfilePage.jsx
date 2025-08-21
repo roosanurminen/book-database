@@ -81,6 +81,7 @@ const Profile = () => {
                                 id='username'
                                 value={formData.username}
                                 onChange={handleChange}
+                                autoComplete='off'
                                 required
                             />
                     </div>

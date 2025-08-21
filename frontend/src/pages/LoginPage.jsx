@@ -30,7 +30,8 @@ const LoginPage = () => {
     }
     return (
         <div className='login-page'>
-            <h1 className='login-header'>Kirjahylly jutksa</h1>
+            <h1 className='login-header'>Kirjahyllysi</h1>
+            <p className='login-desc'>- kaikki kirjasi yhdessä paikassa</p>
             <div className='login-container'>
                 <h3 className='login-form-title'>Kirjaudu sisään</h3>
                 <form onSubmit={handleSubmit}>
@@ -46,9 +47,9 @@ const LoginPage = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder='Salasana'
                     />
-                    <button type="submit">Kirjaudu sisään</button>
+                    <button type='submit'>Kirjaudu sisään</button>
                 </form>
-                <Link to="/register">Ei tunnuksia? Luo sellainen</Link>
+                <Link to='/register'>Ei tunnuksia? Luo tili</Link>
             </div>
         </div>
     )

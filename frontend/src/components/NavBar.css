@@ -112,17 +112,32 @@ body {
         width: 100vw;
         height: calc(100vh - 60px);
         top: 60px;
-        align-items: center;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 1rem;
+        transition: opacity 0.3s ease;
     }
 
     .menu-links {
         display: flex;
         flex-direction: column;
-        padding: 2rem;
+        align-items: flex-start;
+        gap: 1.5rem;
+        padding: 5rem;
+    }
+
+    .menu-links a, .menu-links button {
+        width: 100%;
+        max-width: 300px;
+        text-align: left;
+        font-size: 1.2rem;
+        color: #d9d9d9;
+        transition: all 0.2s ease;
+        padding-left: 1rem;
     }
 
 
-    /*.nav button:active, .nav a:active {
+    .menu-links a:active, .menu-links button:active,.menu-links a:focus, .menu-links button:focus {
         color:  #fff;
-    }*/
+    }
 }

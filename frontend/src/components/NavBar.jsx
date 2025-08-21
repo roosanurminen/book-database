@@ -44,7 +44,7 @@ const NavBar = () => {
     return (
         <nav className='nav'>
             <div className='nav-left'>
-                <Link to='/'>Kirjahyllyni</Link>
+                <Link to='/'>Kirjahyllysi</Link>
             </div>
             
             <div className='desktop-nav-right'>
@@ -54,25 +54,11 @@ const NavBar = () => {
                 <button onClick={handleLogout}>Kirjaudu ulos</button>
             </div>
             
-            {/*{!hamburgerClose && (
-                <div className='hamburger-btn' onClick={hamburgerClick}>
-                    <div className='burger' />
-                    <div className='burger' />
-                    <div className='burger' />
-                </div>
-            )}
-
-            {hamburgerClose && (
-                <button className='hamburger-btn' onClick={closeMenu}>X</button>
-            )}*/}
-
             <div className={`hamburger-btn ${menuOpen ? 'open' : ''}`} onClick={hamburgerClick}>
                 <div className='burger' />
                 <div className='burger' />
                 <div className='burger' />
             </div>
-
-
 
             {menuOpen && (
                 <div className='mobile-menu'>

@@ -6,20 +6,28 @@
 
 .login-page {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
     min-height: 100vh;
     background-color: #F3F4F6;
     font-family: Georgia, serif;
+    padding: 20px;
 }
 
 .login-header {
-    position: absolute;
-    top: 20px;
-    left: 30px;
-    font-size: 1.8rem;
+    margin-bottom: 10px;
+    padding-top: 40px;
+    font-size: 2rem;
     color: #333;
+    font-size: 2.6rem;
     font-weight: bold;
+}
+
+.login-desc {
+    font-style: italic;
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 50px;
 }
 
 .login-container {
@@ -30,17 +38,18 @@
     width: 100%;
     max-width: 400px;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .login-form-title {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     color: #333;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .login-page input {
     display: block;
-    padding: 20px;
+    padding: 16px 20px;
     margin: 20px 0px;
     border: 1px solid #ccc;
     border-radius: 0.4rem;
@@ -48,25 +57,29 @@
     width: 100%;
 }
 
-
 .login-page button {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
     font-size: 1rem;
-    background-color: #4db8ff;
+    background-color: #99d1ff;
     color: white;
     border: none;
     border-radius: 0.4rem;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
+.login-page button:hover {
+    background-color: #66b8ff;
+}
 
 .login-page a {
     display: inline-block;
     color: #333;
     margin-top: 1rem;
     text-decoration: none;
+    font-size: 1rem;
 }
 
 .login-page a:hover {
@@ -76,8 +89,37 @@
  @media only screen and (max-width: 600px) {
     .login-container {
         padding: 1.5rem;
-        max-width: 90%;
+    }
+
+    .login-header {
+        font-size: 2rem;
+    }
+
+    .login-desc {
+        font-size: 1rem;
+    }
+
+    .login-form-title {
+        font-size: 1.2rem;
+    }
+
+    .login-page input {
+        font-size: 0.85rem;
+    }
+
+    .login-page button {
+        font-size: 0.85rem;
+    }
+
+    .login-page a {
+        font-size: 0.85rem;
+    }
+
+    .login-page button:active, .login-page button:focus {
+        background-color: #66b8ff;
+    }
+
+    .login-page a:active, .login-page a:focus {
+        color: #555;
     }
 }
-
-/*#f6f8fa (ligth), #F3F4F6 / #F5F5F7 /#F4F5F9 ghost whites, #EDE8D0 / #F5F5DC / #C9C5B1
