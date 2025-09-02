@@ -1,21 +1,19 @@
 import { useEffect, useState } from 'react';
 import Dropdown from './Dropdown';
 import SearchBar from './SearchBar';
-import axios from 'axios';
+//import axios from 'axios';
 import './SearchPanel.css';
+import axiosInstance from '../api/axiosInstance';
 
-const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchValue, setHasSearched  }) => {
+const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchValue, setSubmitValue, setHasSearched  }) => {
 
     const [options, setOptions] = useState([]);
+    
 
     const isSeriesFull = async (value) => {
         try {
             
-            const response = await axios.get(`http://localhost:5000/api/series-full/${category}`, {
-                withCredentials: true,
-                params: {search: value}
-            });
-
+            const response = await axiosInstance.get(`/series-full/${category}`, { params: {search: value} });
             return response.data;
 
         } catch (error) {
@@ -26,8 +24,7 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
 
     const missingBooks = async (value) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/missing/${category}`, {
-                withCredentials: true,
+            const response = await axiosInstance.get(`/missing/${category}`, {
                 params: {search: value}
             });
 
@@ -40,9 +37,8 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
 
     const fetchSearch = async (value) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/search/${category}`, {
-                withCredentials: true,
-                params: {search: value}
+            const response = await axiosInstance.get(`/search/${category}`, {
+                params: {search: value, exact: true}
             });
 
             const data = response.data;
@@ -92,8 +88,7 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
 
     const fetchMatchingData = async (value) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/search/${category}`, {
-                withCredentials: true,
+            const response = await axiosInstance.get(`/search/${category}`, {
                 params: {search: value}
             });
 
@@ -143,7 +138,12 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
     }
 
     const handleSearch = (value) => {
-        setSearchValue(value);      
+        if (!value || value.trim() === "") {
+            return;
+        }
+        
+        setSearchValue(value);
+        setSubmitValue(value);      
         fetchSearch(value);
         setOptions([]);
         setHasSearched(true);

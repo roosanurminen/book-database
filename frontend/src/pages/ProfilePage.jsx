@@ -1,8 +1,9 @@
-import axios from 'axios';
+//import axios from 'axios';
 import { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import { toast } from 'react-toastify';
 import './ProfilePage.css'
+import axiosInstance from '../api/axiosInstance';
 
 const Profile = () => {
     const [userData, setUserData] = useState({
@@ -19,9 +20,7 @@ const Profile = () => {
     useEffect(() => {
         const getUserData = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/profile', {
-                    withCredentials: true,
-                });
+                const response = await axiosInstance.get('/profile');
                 const data = {
                     username: response.data.username,
                     email: response.data.email,
@@ -54,10 +53,8 @@ const Profile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put('http://localhost:5000/api/profile', {
+            const response = await axiosInstance.put('/profile', {
                 user_name: formData.username,
-            }, {
-                    withCredentials: true,
             });
             toast.success('Profiili päivitetty onnistuneesti!');
             setUserData((prev) => ({...prev, username: formData.username}))

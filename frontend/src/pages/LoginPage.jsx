@@ -4,15 +4,48 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 
-
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { setAuthState } = useAuth();
     const navigate = useNavigate();
+    const [errors, setErrors] = useState({
+        email: '',
+        password: '',
+        err: ''
+    })
+
+    const emailChange = (e) => {
+        setEmail(e.target.value);
+
+        if (e.target.value.trim().length === 0) {
+            setErrors(prev => ({ ...prev, email: 'Sähköposti vaaditaan'}));
+        } else {
+            setErrors(prev => ({ ...prev, email: ''}));
+        }
+    }
+
+    const passwrodChange = (e) => {
+        setPassword(e.target.value);
+
+        if (e.target.value.trim().length === 0) {
+            setErrors(prev => ({ ...prev, password: 'Salasana vaaditaan'}));
+        } else {
+            setErrors(prev => ({ ...prev, password: ''}));
+        }
+    }
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (email.trim().length === 0 || password.trim().length === 0) {
+            setErrors({
+                email: email.trim().length === 0 ? 'Säköposti vaaditaan' : '', 
+                password: password.trim().length === 0 ? 'Salasana vaaditaan' : ''
+            });
+            return;
+        }
         try {
             const requestBody = {email, password};
             const response = await axios.post('http://localhost:5000/api/login', requestBody, {
@@ -26,6 +59,12 @@ const LoginPage = () => {
             navigate('/')
         } catch (error) {
             console.log("handleSubmit err:", error);
+
+            if (error.response && error.response.data?.message) {
+                setErrors(prev => ({ ...prev, err: error.response.data.message }));
+            } else {
+                alert('Tapahtui palvelinvirhe');
+            }
         }
     }
     return (
@@ -34,19 +73,24 @@ const LoginPage = () => {
             <p className='login-desc'>- kaikki kirjasi yhdessä paikassa</p>
             <div className='login-container'>
                 <h3 className='login-form-title'>Kirjaudu sisään</h3>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} noValidate>
                     <input
                         type='email'
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={emailChange}
                         placeholder='Sähköposti'
+                        className={errors.email ? 'input-error' : ''}
                     />
+                    {errors.email && <p className='error-p'>{errors.email}</p>}
                     <input
                         type='password'
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={passwrodChange}
                         placeholder='Salasana'
+                        className={errors.password ? 'input-error' : ''}
                     />
+                    {errors.password && <p className='error-p'>{errors.password}</p>}
+                    {errors.err && <p className='err-error'>{errors.err}</p>} 
                     <button type='submit'>Kirjaudu sisään</button>
                 </form>
                 <Link to='/register'>Ei tunnuksia? Luo tili</Link>

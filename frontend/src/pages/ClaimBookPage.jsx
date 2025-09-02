@@ -1,10 +1,11 @@
 import BookForm from '../components/BookForm'
 import NavBar from '../components/NavBar';
 import { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../api/axiosInstance';
 
 
 const ClaimBookPage = () => {
@@ -33,6 +34,25 @@ const ClaimBookPage = () => {
     const [isGroupChecked, setGroupIsChecked] = useState(false);
     const [options, setOptions] = useState([]);
     const [activeField, setActiveField] = useState('');
+    const [errors, setErrors] = useState({
+        title: '',
+        authors: [''],
+        seriesName: '',
+        seriesPart: '',
+        seriesTotalBooks: '',
+        group: '',
+        releaseYear: '',
+        genres: '',
+        bookType: '',
+        pages: '',
+        condition: '',
+        coverType: '',
+        edition: '',
+        language: '',
+        isPerfect: '',
+        notes: ''
+    });
+    const [touched, setTouched] = useState(false);
     
     let dropdownRef = useRef();
     
@@ -56,11 +76,7 @@ const ClaimBookPage = () => {
     useEffect(() => {
         const getBookData = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/claim-book?bookId=${bookId}`, {
-                    withCredentials: true
-                });
-
-                console.log(response.data.seriesName)
+                const response = await axiosInstance.get(`/claim-book?bookId=${bookId}`);
 
                 const data = {
                     title: response.data.title,
@@ -106,8 +122,7 @@ const ClaimBookPage = () => {
 
     const fetchMatchingData = async (category, value) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/search/${category}`, {
-                withCredentials: true,
+            const response = await axiosInstance.get(`/search/${category}`, {
                 params: {search: value}
             });
 
@@ -155,9 +170,73 @@ const ClaimBookPage = () => {
             .trim();
     }
 
+    const validation = (name, value, id) => {
+        let msg = '';
+
+        if (name === 'authors') {
+            const index = parseInt(id, 10);
+            setErrors(prev => {
+                    const updatedAuthors = [...prev.authors];
+                    updatedAuthors[index] = value.trim() ? '' : 'Pakollinen kenttä';
+                    return {
+                        ...prev,
+                        authors: updatedAuthors
+                    };
+            });
+            return;
+        }
+
+        if (name === 'notes') {
+            if ((bookDetails.isPerfect === 'false' || bookDetails.isPerfect === null) && !value.trim()) {
+                msg = 'Pakollinen kenttä';
+            }
+        }
+
+        if (name === 'isPerfect') {
+            if (value === 'true' || value === null) {
+                setErrors(prev => ({ ...prev, notes: '' }));
+            }
+        }
+
+        const numberFields = ['seriesPart', 'seriesTotalBooks', 'releaseYear', 'pages', 'edition'];
+        if (numberFields.includes(name) && value && isNaN(Number(value))) {
+            msg = 'Vain numerot sallittu';
+        }
+
+        const dropdowns = ['bookType', 'condition', 'coverType', 'isPerfect']
+        if (dropdowns.includes(name) && !value) {
+            msg = 'Pakollinen kenttä';
+        }
+
+        if (name !== 'notes') {
+            if (value === null || value === undefined) {
+                msg = 'Pakollinen kenttä';
+            } else if (typeof value === 'string' && !value.trim()) {
+                msg = 'Pakollinen kenttä';
+            } else if (Array.isArray(value) && value.length === 0) {
+                msg = 'Pakollinen kenttä';
+            }
+        }
+
+        if ((name === 'seriesName' || name === 'seriesPart' || name === 'seriesTotalBooks') && !isSeriesChecked) {
+            msg = '';
+        }
+
+        if (name === 'group' && !isGroupChecked) {
+            msg = '';
+        }
+
+        setErrors(prev => ({ 
+            ...prev, 
+            [name]: msg
+        }));
+    }
+
 
     const handleChange = async (e) => {
         const {name, value, id} = e.target;
+
+        validation(name, value, id);
 
         if (name === 'authors') {
             const index = parseInt(id, 10);
@@ -242,27 +321,63 @@ const ClaimBookPage = () => {
     }
 
     const onSeriesChange = async (e) => {
-        setSeriesIsChecked(!isSeriesChecked);
+        //setSeriesIsChecked(!isSeriesChecked);
 
-        if (!isSeriesChecked === false) {
+        /*if (!isSeriesChecked === false) {
             setBookDetails(prev => ({
                 ...prev,
                 seriesName: '',
                 seriesPart: '',
                 seriesTotalBooks: ''
             }));
-        }
+        }*/
+
+        setSeriesIsChecked(prev => {
+            const newValue = !prev;
+            if (!newValue) {
+                setErrors(prevErr => ({
+                    ...prevErr,
+                    seriesName: '',
+                    seriesPart: '',
+                    seriesTotalBooks: ''
+                }));
+                setBookDetails(prev => ({
+                    ...prev,
+                    seriesName: '',
+                    seriesPart: '',
+                    seriesTotalBooks: ''
+                }));
+            }
+            return newValue;
+        })
+
+
     }
 
     const onGroupChange = async (e) => {
-        setGroupIsChecked(!isGroupChecked);
+        /*setGroupIsChecked(!isGroupChecked);
 
         if (!isGroupChecked === false) {
             setBookDetails(prev => ({
                 ...prev,
                 group: ''            
             }));
-        }
+        }*/
+
+        setGroupIsChecked(prev => {
+            const newValue = !prev;
+            if (!newValue) {
+                setErrors(prevErrors => ({
+                    ...prevErrors,
+                    group: ''
+                }));
+                setBookDetails(prev => ({
+                    ...prev,
+                    group: ''
+                }));
+            }
+            return newValue;
+        });
     }
 
     const addAuthorField = async (e) => {
@@ -281,10 +396,23 @@ const ClaimBookPage = () => {
                 authors: updatedAuthors
             }
         });
+
+        setErrors(prev => {
+            const updatedErrors = [...prev.authors];
+            updatedErrors.splice(index, 1);
+            return {
+                ...prev,
+                authors: updatedErrors
+            }
+        });
     }
 
     const handleGenreChange = async (selectedValues) => {
         const selectedGenres = selectedValues.map(option => option.value);
+        setErrors(prev => ({
+            ...prev,
+            genres: selectedGenres.length === 0 ? 'Pakollinen kenttä' : ''
+        }));
         setBookDetails(prev => ({
             ...prev,
             genres: selectedGenres
@@ -327,25 +455,67 @@ const ClaimBookPage = () => {
             bookDetails.seriesTotalBooks
         );
 
+        const noErrors = Object.values(errors).every(val => {
+            if (Array.isArray(val)) {
+                return val.every(e => e === '');
+            }
+            return val === '';
+        });
+
         const groupRequired = !isGroupChecked || bookDetails.group.trim();
 
-        const notesRequired = isPerfect === 'true' || notes.trim();
+        const notesRequired = isPerfect === 'false' ? notes.trim() !== '' : true;
 
-        return required && seriesRequired && groupRequired && notesRequired;
+        return required && seriesRequired && groupRequired && notesRequired && noErrors;
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:5000/api/add-new-book', bookDetails, {
-                withCredentials: true,
-            });
 
-            const deleteMissing = await axios.delete(`http://localhost:5000/api/delete-missing?bookId=${bookId}`, {
-                withCredentials: true,
-            })
+        Object.entries(bookDetails).forEach(([name, value]) => {
+            if (name === 'authors') {
+                value.forEach((author, idx) => validation(name, author, idx))
+            } else if (name === 'genres') {
+                if (bookDetails.genres.length === 0) {
+                    setErrors(prev => ({ ...prev, genres: 'Pakollinen kenttä' }));
+                    setTouched(true);
+                }
+            } else if ((name.startsWith('series') && !isSeriesChecked) || (name === 'group' && !isGroupChecked)) {
+                return;
+            } else {
+                validation(name, value);
+            }
+        });
+
+        if (!isFormValid()) {
+            return;
+        }
+
+        try {
+            const response = await axiosInstance.post('/add-new-book', bookDetails);
+
+            const deleteMissing = await axiosInstance.delete(`/delete-missing?bookId=${bookId}`)
 
             toast.success('Kirja lisätty!');
+            setTouched(false);
+            setErrors({
+                title: '',
+                authors: [''],
+                seriesName: '',
+                seriesPart: '',
+                seriesTotalBooks: '',
+                group: '',
+                releaseYear: '',
+                genres: [],
+                bookType: '',
+                pages: '',
+                condition: '',
+                coverType: '',
+                edition: '',
+                language: '',
+                isPerfect: '',
+                notes: ''
+            });
             navigate('/');
 
         } catch (error) {
@@ -368,12 +538,15 @@ const ClaimBookPage = () => {
                     addAuthorField={addAuthorField}
                     removeAuthorField={removeAuthorField}
                     handleGenreChange={handleGenreChange}
-                    isFormValid={isFormValid}
                     options={options}
                     activeField={activeField}
                     handleOptionSelect={handleOptionSelect}
                     dropdownRef={dropdownRef}
                     isClaimed={true}
+                    errors={errors}
+                    touched={touched}
+                    setTouched={setTouched}
+                    isFormValid={isFormValid}
                 />
             </div>
         </div>

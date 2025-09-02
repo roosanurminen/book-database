@@ -19,8 +19,24 @@ const SearchBar = ({ category, searchValue, handleInputChange, handleSearch }) =
                                         : 'Näytetään puuttuvat kirjasi'
                 }
                 disabled={category === 'all' || category === 'missing'}
+                onKeyDown={(e) => {
+                    console.log(e.key)
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (category !== 'all' && category !== 'missing') {
+                           handleSearch(searchValue);
+                        }
+                    } 
+                }} 
             />
-            <button className='search-button' type='submit' disabled={category==='all' || category === 'missing'} onClick={() => handleSearch(searchValue)}>Hae</button>
+            <button 
+                className='search-button' 
+                type='submit' 
+                disabled={category==='all' || category === 'missing'} 
+                onClick={() => handleSearch(searchValue)}
+                >
+                Hae
+            </button>
         </div>
     )
 }

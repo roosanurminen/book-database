@@ -1,9 +1,10 @@
-import axios from 'axios';
+//import axios from 'axios';
 import { useRef, useState, useEffect} from 'react';
 import BookForm from '../components/BookForm'
 import './NewBookPage.css'
 import NavBar from '../components/NavBar';
 import { toast } from 'react-toastify';
+import axiosInstance from '../api/axiosInstance';
 
 const MissingBookPage = () => {
     const [bookDetails, setBookDetails] = useState({
@@ -19,6 +20,15 @@ const MissingBookPage = () => {
     const [isGroupChecked, setGroupIsChecked] = useState(false);
     const [options, setOptions] = useState([]);
     const [activeField, setActiveField] = useState('');
+
+    const [errors, setErrors] = useState({
+        title: '',
+        authors: [''],
+        seriesName: '',
+        seriesPart: '',
+        seriesTotalBooks: '',
+        group: '',
+    });
 
     let dropdownRef = useRef();
     
@@ -50,8 +60,7 @@ const MissingBookPage = () => {
 
     const fetchMatchingData = async (category, value) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/search/${category}`, {
-                withCredentials: true,
+            const response = await axiosInstance.get(`/search/${category}`, {
                 params: {search: value}
             });
 
@@ -89,9 +98,53 @@ const MissingBookPage = () => {
         }
     }
 
+    const validation = (name, value, id) => {
+        let msg = '';
+
+        if (name === 'authors') {
+            const index = parseInt(id, 10);
+            setErrors(prev => {
+                    const updatedAuthors = [...prev.authors];
+                    updatedAuthors[index] = value.trim() ? '' : 'Pakollinen kenttä';
+                    return {
+                        ...prev,
+                        authors: updatedAuthors
+                    };
+            });
+            return;
+        }
+
+        const numberFields = ['seriesPart', 'seriesTotalBooks'];
+        if (numberFields.includes(name) && value && isNaN(Number(value))) {
+            msg = 'Vain numerot sallittu';
+        }
+
+        if (value === null || value === undefined) {
+            msg = 'Pakollinen kenttä';
+        } else if (typeof value === 'string' && !value.trim()) {
+            msg = 'Pakollinen kenttä';
+        }
+
+        if ((name === 'seriesName' || name === 'seriesPart' || name === 'seriesTotalBooks') && !isSeriesChecked) {
+            msg = '';
+        }
+
+        if (name === 'group' && !isGroupChecked) {
+            msg = '';
+        }
+
+
+        setErrors(prev => ({ 
+            ...prev, 
+            [name]: msg
+        }));
+    }
+
 
     const handleChange = async (e) => {
         const {name, value, id} = e.target;
+
+        validation(name, value, id);
 
         if (name === 'authors') {
             const index = parseInt(id, 10);
@@ -176,11 +229,43 @@ const MissingBookPage = () => {
     }
 
     const onSeriesChange = async (e) => {
-        setSeriesIsChecked(!isSeriesChecked);
+        //setSeriesIsChecked(!isSeriesChecked);
+        setSeriesIsChecked(prev => {
+            const newValue = !prev;
+            if (!newValue) {
+                setErrors(prevErr => ({
+                    ...prevErr,
+                    seriesName: '',
+                    seriesPart: '',
+                    seriesTotalBooks: ''
+                }));
+                setBookDetails(prev => ({
+                    ...prev,
+                    seriesName: '',
+                    seriesPart: '',
+                    seriesTotalBooks: ''
+                }));
+            }
+            return newValue;
+        })
     }
 
     const onGroupChange = async (e) => {
-        setGroupIsChecked(!isGroupChecked);
+        //setGroupIsChecked(!isGroupChecked);
+        setGroupIsChecked(prev => {
+            const newValue = !prev;
+            if (!newValue) {
+                setErrors(prevErrors => ({
+                    ...prevErrors,
+                    group: ''
+                }));
+                setBookDetails(prev => ({
+                    ...prev,
+                    group: ''
+                }));
+            }
+            return newValue;
+        });
     }
 
     const addAuthorField = async (e) => {
@@ -197,6 +282,14 @@ const MissingBookPage = () => {
             return {
                 ...prev,
                 authors: updatedAuthors
+            }
+        });
+        setErrors(prev => {
+            const updatedErrors = [...prev.authors];
+            updatedErrors.splice(index, 1);
+            return {
+                ...prev,
+                authors: updatedErrors
             }
         });
     }
@@ -232,24 +325,39 @@ const MissingBookPage = () => {
             bookDetails.seriesTotalBooks
         );
 
+        const noErrors = Object.values(errors).every(val => {
+            if (Array.isArray(val)) {
+                return val.every(e => e === '');
+            }
+            return val === '';
+        });
+
         const groupRequired = !isGroupChecked || bookDetails.group.trim();
 
-        return required && seriesRequired && groupRequired;
+        return required && seriesRequired && groupRequired && noErrors;
     }
-
-    /*const handleGenreChange = async () => {
-        
-    }*/
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        Object.entries(bookDetails).forEach(([name, value]) => {
+            if (name === 'authors') {
+                value.forEach((author, idx) => validation(name, author, idx))
+            } else if ((name.startsWith('series') && !isSeriesChecked) || (name === 'group' && !isGroupChecked)) {
+                return;
+            } else {
+                validation(name, value);
+            }
+        });
+
+        if (!isFormValid()) {
+            return;
+        }
+
         try {
             const requestBody = bookDetails;
 
-            const response = await axios.post('http://localhost:5000/api/add-missing-book', requestBody, {
-                withCredentials: true,
-            });
+            const response = await axiosInstance.post('/add-missing-book', requestBody);
             toast.success('Kirja lisätty!');
 
             clearForm();
@@ -273,13 +381,12 @@ const MissingBookPage = () => {
                     onGroupChange={onGroupChange} 
                     addAuthorField={addAuthorField}
                     removeAuthorField={removeAuthorField}
-                    //handleGenreChange={handleGenreChange}
-                    isFormValid={isFormValid}
                     options={options}
                     activeField={activeField}
                     handleOptionSelect={handleOptionSelect}
                     dropdownRef={dropdownRef}
                     isMissing={true}
+                    errors={errors}
                 />
             </div>
         </div>

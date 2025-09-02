@@ -1,0 +1,115 @@
+.confirm-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background:rgba(55,55,55,.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.confirm-content {
+    position: relative;
+    padding: 32px;
+    width: 100%;
+    max-width: 500px;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    max-height: 90vh;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    
+}
+
+.confirm-modal h3 {
+    font-size: 24px;
+    color: #333;
+    font-family: Georgia, serif;
+    margin-bottom: 26px;
+}
+
+.confirm-modal p {
+    font-size: 16px;
+    color: #333;
+    font-family: Georgia, serif;
+    margin-bottom: 24px;
+}
+
+
+.confirm-btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.confirm-modal .cancel-btn {
+    cursor: pointer;
+    border: none;
+    font-family: Georgia, serif;
+    border-radius: 0.4rem;
+    font-size: 14px;
+    padding: 12px;
+    color: #333;
+    background-color: transparent;
+}
+
+.confirm-modal .cancel-btn:hover {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.confirm-modal .confirm-btn {
+    cursor: pointer;
+    border: none;
+    font-family: Georgia, serif;
+    border-radius: 0.4rem;
+    font-size: 14px;
+    padding: 12px;
+    color: white;
+    background-color: #ff9999; 
+}
+
+.confirm-modal .confirm-btn:hover {
+  background-color: #ff6666;
+}
+
+
+@media only screen and (max-width: 767px) {
+
+    .confirm-content {
+        width: 90%; 
+        padding: 20px; 
+    }
+
+    .book-form input, .book-form .dropdown, .book-form .option-dropdown {
+        font-size: 0.85rem;
+    }
+
+    .confirm-modal .confirm-btn, .confirm-modal .cancel-btn {
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .confirm-modal .confirm-btn:active, .confirm-modal .confirm-btn:focus {
+        background-color: #ff6666;
+    }
+
+    .confirm-modal .cancel-btn:active, .confirm-modal .cancel-btn:focus {
+        background-color: #e0e0e0;
+    }
+
+    .confirm-modal h3 {
+        font-size: 1.2rem;
+        margin-bottom: 24px;
+    }
+
+    .confirm-modal p {
+        font-size: 0.9rem;
+        margin-bottom: 36px;
+    }
+
+}

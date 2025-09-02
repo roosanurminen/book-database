@@ -11,7 +11,7 @@ function authMiddleware(req, res, next) {
         req.user_id = data.user_id;
         next();
     } catch {
-        return res.status(403).json({ error: 'Invalid token' });
+        return res.status(401).json({ error: 'Invalid token' });
     }
 }
 

@@ -4,9 +4,10 @@ import NavBar from '../components/NavBar';
 import './HomePage.css';
 import { useEffect, useState } from 'react';
 import BookList from '../components/BookList';
-import axios from 'axios';
+//import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../api/axiosInstance';
 
 const HomePage = () => {
     const { authState } = useAuth();
@@ -15,6 +16,7 @@ const HomePage = () => {
     const [books, setBooks] = useState({books: [], authorName: '', seriesFull: [], missingBooks: []});
     const [category, setCategory] = useState('all');
     const [searchValue, setSearchValue] = useState('');
+    const [submitValue, setSubmitValue] = useState(''); 
     const [hasSearched, setHasSearched] = useState(false);
     const [selectedBook, setSelectedBook] = useState(null);
     const [showAlsoMissing, setShowAlsoMissing] = useState(false);
@@ -31,6 +33,30 @@ const HomePage = () => {
         showToggle = true;
     }
 
+    
+    const fetchAllBooks = async (value) => {
+        try {
+            const response = await axiosInstance.get('http://localhost:5000/api/search/all');
+            setBooks({ books: response.data, authorName: '', seriesFull: [], missingBooks: [] });
+            setHasSearched(false);
+        } catch (err) {
+            console.log('Failed to fetch all books', err);
+        }
+    }
+
+    useEffect(() => {
+        fetchAllBooks();
+    }, []);
+
+    const resetHomePage = () => {
+        setCategory('all');
+        setSearchValue('');
+        setHasSearched(false);
+        setSelectedBook(null);
+        setShowAlsoMissing(false);
+        fetchAllBooks();
+    }
+
     const handleEdit = async (book) => {
         const bookId = book.book_id;
         navigate(`/edit-book/${bookId}`)
@@ -44,8 +70,7 @@ const HomePage = () => {
     const handleDelete = async (book) => {
         try {
             const bookId = book.book_id;
-            await axios.delete('http://localhost:5000/api/delete-book', {
-                withCredentials: true,
+            await axiosInstance.delete('/delete-book', {
                 data: {bookId}
             });
 
@@ -66,8 +91,7 @@ const HomePage = () => {
     const handleMissingDelete = async (book) => {
         try {
             const bookId = book.book_id;
-            await axios.delete('http://localhost:5000/api/delete-missing', {
-                withCredentials: true,
+            await axiosInstance.delete('/delete-missing', {
                 data: {bookId}
             });
 
@@ -88,7 +112,7 @@ const HomePage = () => {
 
     return (
         <div className='home-page'>
-            <NavBar />
+            <NavBar resetHomePage={resetHomePage}/>
             {/*<h2 className='home-header'>Helloota {user_name}</h2>*/}
             <div className='search'>
                 <SearchPanel 
@@ -97,6 +121,7 @@ const HomePage = () => {
                     setCategory={setCategory}
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
+                    setSubmitValue={setSubmitValue}
                     setHasSearched={setHasSearched}
                 />
             </div>
@@ -108,6 +133,7 @@ const HomePage = () => {
                     missingBooks={books.missingBooks}
                     category={category}
                     searchValue={searchValue}
+                    submitValue={submitValue}
                     hasSearched={hasSearched}
                     handleEdit={handleEdit}
                     handleAdd={handleAdd}

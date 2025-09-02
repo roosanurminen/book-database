@@ -1,11 +1,11 @@
 import BookForm from '../components/BookForm'
 import NavBar from '../components/NavBar';
 import { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
-
+import axiosInstance from '../api/axiosInstance';
 
 const EditBookPage = () => {
 
@@ -55,6 +55,26 @@ const EditBookPage = () => {
     const [isGroupChecked, setGroupIsChecked] = useState(false);
     const [options, setOptions] = useState([]);
     const [activeField, setActiveField] = useState('');
+
+    const [errors, setErrors] = useState({
+        title: '',
+        authors: [''],
+        seriesName: '',
+        seriesPart: '',
+        seriesTotalBooks: '',
+        group: '',
+        releaseYear: '',
+        genres: [],
+        bookType: '',
+        pages: '',
+        condition: '',
+        coverType: '',
+        edition: '',
+        language: '',
+        isPerfect: '',
+        notes: ''
+    });
+    const [touched, setTouched] = useState(false);
     
     let dropdownRef = useRef();
     
@@ -78,9 +98,7 @@ const EditBookPage = () => {
     useEffect(() => {
         const getBookData = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/edit-book?bookId=${bookId}`, {
-                    withCredentials: true
-                });
+                const response = await axiosInstance.get(`/edit-book?bookId=${bookId}`);
 
                 const data = {
                     title: response.data.title,
@@ -125,14 +143,26 @@ const EditBookPage = () => {
 
 
     useEffect(() => {
-        setIsFormEdited(JSON.stringify(bookDetails) !== JSON.stringify(originalBookDetails))
+        const normalizeNumbers = (obj) => ({
+            ...obj,
+            seriesPart: obj.seriesPart ? Number(obj.seriesPart) : '',
+            seriesTotalBooks: obj.seriesTotalBooks ? Number(obj.seriesTotalBooks) : '',
+            releaseYear: obj.releaseYear ? Number(obj.releaseYear) : '',
+            pages: obj.pages ? Number(obj.pages) : '',
+            edition: obj.edition ? Number(obj.edition) : '',
+        });
+
+        const normOriginal = normalizeNumbers(originalBookDetails);
+        const normNew = normalizeNumbers(bookDetails);
+
+
+        setIsFormEdited(JSON.stringify(normNew) !== JSON.stringify(normOriginal))
     }, [bookDetails, originalBookDetails])
 
 
     const fetchMatchingData = async (category, value) => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/search/${category}`, {
-                withCredentials: true,
+            const response = await axiosInstance.get(`/search/${category}`, {
                 params: {search: value}
             });
 
@@ -180,9 +210,72 @@ const EditBookPage = () => {
             .trim();
     }
 
+    const validation = (name, value, id) => {
+        let msg = '';
+
+        if (name === 'authors') {
+            const index = parseInt(id, 10);
+            setErrors(prev => {
+                    const updatedAuthors = [...prev.authors];
+                    updatedAuthors[index] = value.trim() ? '' : 'Pakollinen kenttä';
+                    return {
+                        ...prev,
+                        authors: updatedAuthors
+                    };
+            });
+            return;
+        }
+
+        if (name === 'notes') {
+            if ((bookDetails.isPerfect === 'false' || bookDetails.isPerfect === null) && !value.trim()) {
+                msg = 'Pakollinen kenttä';
+            }
+        }
+
+        if (name === 'isPerfect') {
+            if (value === 'true' || value === null) {
+                setErrors(prev => ({ ...prev, notes: '' }));
+            }
+        }
+
+        const numberFields = ['seriesPart', 'seriesTotalBooks', 'releaseYear', 'pages', 'edition'];
+        if (numberFields.includes(name) && value && isNaN(Number(value))) {
+            msg = 'Vain numerot sallittu';
+        }
+
+        const dropdowns = ['bookType', 'condition', 'coverType', 'isPerfect']
+        if (dropdowns.includes(name) && !value) {
+            msg = 'Pakollinen kenttä';
+        }
+
+        if (name !== 'notes') {
+            if (value === null || value === undefined) {
+                msg = 'Pakollinen kenttä';
+            } else if (typeof value === 'string' && !value.trim()) {
+                msg = 'Pakollinen kenttä';
+            } else if (Array.isArray(value) && value.length === 0) {
+                msg = 'Pakollinen kenttä';
+            }
+        }
+
+        if ((name === 'seriesName' || name === 'seriesPart' || name === 'seriesTotalBooks') && !isSeriesChecked) {
+            msg = '';
+        }
+
+        if (name === 'group' && !isGroupChecked) {
+            msg = '';
+        }
+
+        setErrors(prev => ({ 
+            ...prev, 
+            [name]: msg
+        }));
+    }
 
     const handleChange = async (e) => {
         const {name, value, id} = e.target;
+
+        validation(name, value, id);
 
         if (name === 'authors') {
             const index = parseInt(id, 10);
@@ -269,9 +362,15 @@ const EditBookPage = () => {
     const onSeriesChange = async (e) => {
         setSeriesIsChecked(!isSeriesChecked);
 
-        if (!isSeriesChecked === false) {
+        if (!isSeriesChecked) {
             setBookDetails(prev => ({
                 ...prev,
+                seriesName: '',
+                seriesPart: '',
+                seriesTotalBooks: ''
+            }));
+            setErrors(prevErr => ({
+                ...prevErr,
                 seriesName: '',
                 seriesPart: '',
                 seriesTotalBooks: ''
@@ -282,10 +381,14 @@ const EditBookPage = () => {
     const onGroupChange = async (e) => {
         setGroupIsChecked(!isGroupChecked);
 
-        if (!isGroupChecked === false) {
+        if (!isGroupChecked) {
             setBookDetails(prev => ({
                 ...prev,
                 group: ''            
+            }));
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                group: ''
             }));
         }
     }
@@ -306,10 +409,23 @@ const EditBookPage = () => {
                 authors: updatedAuthors
             }
         });
+
+        setErrors(prev => {
+            const updatedErrors = [...prev.authors];
+            updatedErrors.splice(index, 1);
+            return {
+                ...prev,
+                authors: updatedErrors
+            }
+        })
     }
 
     const handleGenreChange = async (selectedValues) => {
         const selectedGenres = selectedValues.map(option => option.value);
+        setErrors(prev => ({
+            ...prev,
+            genres: selectedGenres.length === 0 ? 'Pakollinen kenttä' : ''
+        }));
         setBookDetails(prev => ({
             ...prev,
             genres: selectedGenres
@@ -352,21 +468,65 @@ const EditBookPage = () => {
             bookDetails.seriesTotalBooks
         );
 
+        const noErrors = Object.values(errors).every(val => {
+            if (Array.isArray(val)) {
+                return val.every(e => e === '');
+            }
+            return val === '';
+        });
+
         const groupRequired = !isGroupChecked || bookDetails.group.trim();
 
         const notesRequired = isPerfect === 'true' || notes.trim();
 
-        return required && seriesRequired && groupRequired && notesRequired;
+        return required && seriesRequired && groupRequired && notesRequired && noErrors;
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        Object.entries(bookDetails).forEach(([name, value]) => {
+            if (name === 'authors') {
+                value.forEach((author, idx) => validation(name, author, idx))
+            } else if (name === 'genres') {
+                if (bookDetails.genres.length === 0) {
+                    setErrors(prev => ({ ...prev, genres: 'Pakollinen kenttä' }));
+                    setTouched(true);
+                }
+            } else if ((name.startsWith('series') && !isSeriesChecked) || (name === 'group' && !isGroupChecked)) {
+                return;
+            } else {
+                validation(name, value);
+            }
+        });
+
+        if (!isFormValid()) {
+            return;
+        }
+
         try {
-            const response = await axios.put(`http://localhost:5000/api/edit-book?bookId=${bookId}`, bookDetails, {
-                withCredentials: true,
-            });
+            const response = await axiosInstance.put(`/edit-book?bookId=${bookId}`, bookDetails);
 
             toast.success('Kirjan tiedot päivitetty!');
+            setErrors({
+                title: '',
+                authors: [''],
+                seriesName: '',
+                seriesPart: '',
+                seriesTotalBooks: '',
+                group: '',
+                releaseYear: '',
+                genres: [],
+                bookType: '',
+                pages: '',
+                condition: '',
+                coverType: '',
+                edition: '',
+                language: '',
+                isPerfect: '',
+                notes: ''
+            });
+            setTouched(false);
             navigate('/');
 
         } catch (error) {
@@ -389,13 +549,16 @@ const EditBookPage = () => {
                     addAuthorField={addAuthorField}
                     removeAuthorField={removeAuthorField}
                     handleGenreChange={handleGenreChange}
-                    isFormValid={isFormValid}
                     isEditMode={true}
                     isFormEdited={isFormEdited}
                     options={options}
                     activeField={activeField}
                     handleOptionSelect={handleOptionSelect}
                     dropdownRef={dropdownRef}
+                    errors={errors}
+                    touched={touched}
+                    setTouched={setTouched}
+                    isFormValid={isFormValid}
                 />
             </div>
         </div>

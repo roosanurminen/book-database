@@ -200,6 +200,20 @@ input:disabled {
 }
 
 
+.book-form input.input-error, .book-form select.input-error, .input-error .dropdown__control {
+    border: 1px solid #ff6666;
+}
+
+.book-form .error-p {
+    color: #ff6666;
+    font-size: 0.75rem;
+    text-align: left;
+    margin-top: -8px;
+    margin-bottom: 10px;
+}
+
+
+
 @media only screen and (max-width: 767px) {
     .basic-group, .series-group, .details-group, .physical-group {
         grid-template-columns: 1fr;

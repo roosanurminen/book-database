@@ -9,7 +9,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
 }
 
 .modal-content {
@@ -92,3 +92,51 @@
 .delete-btn:hover {
   background-color: #ffcccc;
 }
+
+
+@media only screen and (max-width: 767px) {
+
+    .modal {
+        padding: 20px;
+    }
+
+    .modal-content {
+        padding: 16px;
+    }
+
+    .close-btn {
+        font-size: 20px;
+    }
+
+    
+    .modal-content h2 {
+        font-size: 18px;
+    }
+
+
+    .modal-content h4 {
+        font-size: 15px;
+    }
+
+    .modal-content p {
+        font-size: 14px;
+    }
+
+    .edit-btn {
+        font-size: 12px;
+    }
+
+    .edit-btn:active, .edit-btn:focus {
+        background-color: #c0e3ff;
+    }
+
+    .delete-btn {
+        font-size: 12px;
+    }
+
+    .delete-btn:active, .delete-btn:focus {
+    background-color: #ffcccc;
+    }
+
+}
+

@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    
 }
 
 body {
@@ -20,6 +21,7 @@ body {
     width: 100%;
     position: fixed; 
     top: 0;
+    z-index: 1000;
 }
 
 .nav a {
@@ -32,9 +34,16 @@ body {
     color: #fff;
 }
 
-.nav-left {
+.go-home {
     font-size: 1.5rem;
     margin-left: 1rem;
+    color: #d9d9d9;
+    cursor: pointer;
+    
+}
+
+.go-home:hover {
+    color: #fff;
 }
 
 .desktop-nav-right {
@@ -116,6 +125,7 @@ body {
         align-items: flex-start;
         gap: 1rem;
         transition: opacity 0.3s ease;
+        z-index: 2000;
     }
 
     .menu-links {
@@ -136,8 +146,11 @@ body {
         padding-left: 1rem;
     }
 
+    .go-home {
+        font-size: 1.4rem;
+    }
 
-    .menu-links a:active, .menu-links button:active,.menu-links a:focus, .menu-links button:focus {
+    .menu-links a:active, .menu-links button:active,.menu-links a:focus, .menu-links button:focus, .go-home:active, .go-home:focus {
         color:  #fff;
     }
 }

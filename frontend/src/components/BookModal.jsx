@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './BookModal.css'
+import ConfirmModal from './ConfirmModal';
 
 const BookModal = ({ book, onClose, handleEdit, handleAdd, handleDelete, handleMissingDelete, isMissing }) => {
-
+    
+    const [showConfirm, setShowConfirm] = useState(false);
 
     if (!book) {
         return null;
@@ -69,7 +71,15 @@ const BookModal = ({ book, onClose, handleEdit, handleAdd, handleDelete, handleM
                         
                         <div className='buttons'>
                             <button className='edit-btn' onClick={() => handleEdit(book)}>Muokkaa</button>
-                            <button className='delete-btn' onClick={() => handleDelete(book)}>Poista</button>
+                            <button className='delete-btn' onClick={() => setShowConfirm(true)}>Poista</button>
+
+                            <ConfirmModal
+                                open={showConfirm}   
+                                title='Poista kirja'
+                                msg='Haluatko varmasti poistaa kirjan?'
+                                onConfirm={() => handleDelete(book)}
+                                onCancel={() => setShowConfirm(false)}
+                            />
                         </div>
                     </>
                 ) : (
@@ -82,7 +92,16 @@ const BookModal = ({ book, onClose, handleEdit, handleAdd, handleDelete, handleM
 
                     <div className='buttons'>
                         <button className='edit-btn' onClick={() => handleAdd(book)}>Lisää kokoelmaan</button>
-                        <button className='delete-btn' onClick={() => handleMissingDelete(book)}>Poista</button>
+                        <button className='delete-btn' onClick={() => setShowConfirm(true)}>Poista</button>
+
+                        
+                        <ConfirmModal
+                            open={showConfirm}   
+                            title='Poista kirja'
+                            msg={`Haluatko varmasti poistaa kirjan: ${book.book_title}?`}
+                            onConfirm={() => handleMissingDelete(book)}
+                            onCancel={() => setShowConfirm(false)}
+                        />
                     </div>
                 </>
             )}

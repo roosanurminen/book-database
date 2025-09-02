@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import { useLocation } from "react-router-dom";
+import axiosInstance from '../api/axiosInstance';
+import { useLocation, useNavigate  } from "react-router-dom";
 
 //https://stackoverflow.com/questions/76448002/react-returns-the-login-page-by-default-if-the-user-isnt-authenticatied-if-i-su
 
@@ -14,39 +14,36 @@ export const AuthContextProvider = ({ children }) => {
 
     const [loading, setLoading] = useState(true);
     const location = useLocation();
-    const requiresAuthentication = location.pathname !== "/login" && location.pathname !== "/register";
+    const requiresAuthentication = location.pathname !== '/login' && location.pathname !== '/register';
+    const navigate = useNavigate();
 
+    const logout = async () => {
+        setAuthState({
+            isAuthenticated: false,
+            user: null
+        });
+        setLoading(false);
+        navigate('/login')
+
+        try {
+            await axiosInstance.post('./logout');
+            console.log("Logged out")
+        } catch (err) {
+            console.error('Error during logout:', err);
+        }
+    };
+    
     const checkAuth = async () => {
         try {
-            const authRes = await axios.get('http://localhost:5000/api/check-auth', { withCredentials: true });
+            const authRes = await axiosInstance.get('/check-auth');
             console.log('checkAuth log', authRes);
 
-            if (authRes.data.authenticated) {
-                setAuthState({
-                    isAuthenticated: true,
-                    user: authRes.data.user
-                });
-            } else {
-                throw new Error("Not authenticated");
-            }
+            setAuthState({
+                isAuthenticated: true,
+                user: authRes.data.user
+            });
         } catch (error) {
-            try {
-                const refreshRes = await axios.post('http://localhost:5000/api/refresh', {}, {withCredentials: true});
-                if (refreshRes) {
-                    const authRes = await axios.get('http://localhost:5000/api/check-auth', { withCredentials: true });
-                    setAuthState({
-                        isAuthenticated: true,
-                        user: authRes.data.user
-                    });
-                } else {
-                    throw new Error("Refresh failed");
-                }
-            } catch (error) {
-                console.log('User not authenticated', error);
-                setAuthState({ 
-                    isAuthenticated: false, 
-                    user: null });
-            }
+            await logout();
         } finally {
             setLoading(false);
         }
@@ -54,7 +51,7 @@ export const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         if (requiresAuthentication) {
-            checkAuth();
+                checkAuth();
         } else {
             setLoading(false);
         }

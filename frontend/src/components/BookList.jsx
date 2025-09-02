@@ -3,7 +3,7 @@ import './BookList.css'
 import BookModal from './BookModal';
 import ToggleSwitch from './ToggleSwitch';
 
-const BookList = ({ books, authorName, seriesFull, missingBooks, category, searchValue, hasSearched, handleEdit, handleAdd, handleDelete, handleMissingDelete, setSelectedBook, selectedBook, showAlsoMissing, setShowAlsoMissing, showToggle }) => {
+const BookList = ({ books, authorName, seriesFull, missingBooks, category, searchValue, submitValue, hasSearched, handleEdit, handleAdd, handleDelete, handleMissingDelete, setSelectedBook, selectedBook, showAlsoMissing, setShowAlsoMissing, showToggle }) => {
     const bookSeries = (value = books) => {
         const copy = value.map(book => ({
             ...book,
@@ -63,7 +63,7 @@ const BookList = ({ books, authorName, seriesFull, missingBooks, category, searc
         content = (
             <div className='book-list'>
                 <div className='book-list-content'>
-                    <h2>Hakutulos: {searchValue}</h2>
+                    <h2>Hakutulos: {submitValue}</h2>
                     {books.map(book => (
                         <BookCard key={book.book_id} book={book} onClick={() => setSelectedBook(book)}/>
                     ))}

@@ -22,10 +22,26 @@ const allGenres = [
 ];
 
 
-const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, onSeriesChange, isGroupChecked, onGroupChange, addAuthorField, removeAuthorField, handleGenreChange, isFormValid, isEditMode=false, isFormEdited=false, options, activeField, handleOptionSelect, dropdownRef, isMissing=false, isClaimed=false}) => {
-    console.log("isClaimed", isClaimed)
+const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, onSeriesChange, isGroupChecked, onGroupChange, addAuthorField, removeAuthorField, handleGenreChange, isEditMode=false, isFormEdited=false, options, activeField, handleOptionSelect, dropdownRef, isMissing=false, isClaimed=false, errors, touched, setTouched}) => {
     return (
-        <form className='book-form' onSubmit={handleSubmit}>
+        <form 
+            className='book-form' 
+            onSubmit={handleSubmit} 
+            onKeyDown={(e) => {
+                console.log(e.key)
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (isEditMode) {
+                        if (isFormEdited) {
+                            handleSubmit(e);
+                        }
+                    } else {
+                        handleSubmit(e);
+                    }
+                } 
+            }} 
+            noValidate
+            >
             <h1> {isEditMode
                     ? 'Muokkaa kirjan tietoja' 
                     : isMissing 
@@ -48,8 +64,9 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                             onChange={handleChange}
                             placeholder='Esim. Sormuksen ritarit'
                             autoComplete='off'
-                            required
+                            className={errors.title ? 'input-error' : ''}
                         />
+                        {errors.title && <p className='error-p'>{errors.title}</p>}
                     </div>
 
                     {bookDetails.authors.map((author, index) => (
@@ -63,8 +80,9 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     onChange={handleChange}
                                     placeholder='Esim. J.R.R. Tolkien'
                                     autoComplete='off'
-                                    required
+                                    className={errors.authors[index] ? 'input-error' : ''}
                                 />
+                                {errors.authors[index] && <p className='error-p'>{errors.authors[index]}</p>}
                                 {options.length > 0 && activeField === `author-${index}` && (
                                     <div className='option-dropdown' ref={dropdownRef}>
                                         {options.map((option) => (
@@ -130,8 +148,10 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     placeholder='Esim. Taru sormusten herrasta'
                                     autoComplete='off'
                                     required={Boolean(isSeriesChecked)}
-                                    
+                                    className={errors.seriesName ? 'input-error' : ''}
                                 />
+                                {errors.seriesName && <p className='error-p'>{errors.seriesName}</p>}
+                                    
                                 {options.length > 0 && activeField === 'series' && (
                                     <div className='option-dropdown' ref={dropdownRef}>
                                         {options.map((option) => (
@@ -146,7 +166,7 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                             <div className='field'>
                                 <label htmlFor='part'>Sarjan osa</label>
                                 <input
-                                    type='number'
+                                    type='text'
                                     name='seriesPart'
                                     id='part'
                                     min='1'
@@ -155,13 +175,16 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     value={bookDetails.seriesPart}
                                     onChange={handleChange}
                                     placeholder='1'
+                                    autoComplete='off'
                                     required={Boolean(isSeriesChecked)}
+                                    className={errors.seriesPart ? 'input-error' : ''}
                                 />
+                                {errors.seriesPart && <p className='error-p'>{errors.seriesPart}</p>}
                             </div>
                             <div className='field'>
                                 <label htmlFor='totalBooks'>Sarjan osien määrä</label>
                                 <input
-                                    type='number'
+                                    type='text'
                                     name='seriesTotalBooks'
                                     id='totalBooks'
                                     min='1'
@@ -170,8 +193,11 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     value={bookDetails.seriesTotalBooks}
                                     onChange={handleChange}
                                     placeholder='1'
+                                    autoComplete='off'
                                     required={Boolean(isSeriesChecked)}
+                                    className={errors.seriesTotalBooks ? 'input-error' : ''}
                                 />
+                                {errors.seriesTotalBooks && <p className='error-p'>{errors.seriesTotalBooks}</p>}
                             </div>
                         </>
                         )}
@@ -217,7 +243,10 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                             placeholder='Esim. Keski-Maa'
                             autoComplete='off'
                             required={Boolean(isGroupChecked)}
+                            className={errors.group ? 'input-error' : ''}
                         />
+                        {errors.group && <p className='error-p'>{errors.group}</p>}
+                        
                         {options.length > 0 && activeField === 'group' && (
                             <div className='option-dropdown' ref={dropdownRef}>
                                 {options.map((option) => (
@@ -244,22 +273,23 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     inputId='genres'
                                     options={allGenres}
                                     value={allGenres.filter(option => bookDetails.genres.includes(option.value))}
-                                    onChange={handleGenreChange}
+                                    onChange={(g) => {handleGenreChange(g), setTouched(true)}}
                                     isMulti
-                                    required
                                     placeholder=""
+                                    className={errors.genres && touched ? 'input-error' : ''}
                                 >
                                 </Select>
+                                {errors.genres && touched && <p className='error-p'>{errors.genres}</p>}
                             </div>
                             <div className='field'>
                                 <label htmlFor='bookType'>Kirjantyyppi</label>
                                 <select 
-                                    className='dropdown'
+                                    className={`dropdown ${errors.bookType ? 'input-error' : ''}`} 
                                     name='bookType'
                                     id='bookType'
                                     value={bookDetails.bookType}
                                     onChange={handleChange}
-                                    required
+                                    
                                 >
                                     <option value=''></option>
                                     <option value='Romaani'>Romaani</option>
@@ -271,22 +301,25 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     <option value='Näytelmä'>Näytelmä</option>
                                     <option value='Kuvakirja'>Kuvakirja</option>
                                 </select>
+                                {errors.bookType && <p className='error-p'>{errors.bookType}</p>}
                             </div>
                             <div className='field'>
                                 <label htmlFor='releaseYear'>Julkaisuvuosi</label>
                                 <input
-                                    type='number'
+                                    type='text'
                                     name='releaseYear'
                                     id='releaseYear'
                                     min='0'
                                     max='2100'
                                     step='1'
                                     inputMode='numeric'
+                                    autoComplete='off'
                                     value={bookDetails.releaseYear}
                                     onChange={handleChange}
                                     placeholder='Esim. 1950'
-                                    required
+                                    className={errors.releaseYear ? 'input-error' : ''}
                                 />
+                                {errors.releaseYear && <p className='error-p'>{errors.releaseYear}</p>}
                             </div>
                             <div className='field'>
                                 <label htmlFor='language'>Kieli</label>
@@ -298,38 +331,43 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     onChange={handleChange}
                                     placeholder='Esim. Suomi'
                                     autoComplete='off'
-                                    required
+                                    className={errors.language ? 'input-error' : ''}
                                 />
+                                {errors.language && <p className='error-p'>{errors.language}</p>}
                             </div>
                             <div className='field'>
                                 <label htmlFor='pages'>Sivumäärä</label>
                                 <input
-                                    type='number'
+                                    type='text'
                                     name='pages'
                                     id='pages'
                                     min='0'
                                     step='1'
                                     inputMode='numeric'
+                                    autoComplete='off'
                                     value={bookDetails.pages}
                                     onChange={handleChange}
                                     placeholder='Esim. 300'
-                                    required
+                                    className={errors.pages ? 'input-error' : ''}
                                 />
+                                {errors.pages && <p className='error-p'>{errors.pages}</p>}
                             </div>
                             <div className='field'>
                                 <label htmlFor='edition'>Painos</label>
                                 <input
-                                    type='number'
+                                    type='text'
                                     name='edition'
                                     id='edition'
                                     min='0'
                                     step='1'
                                     inputMode='numeric'
+                                    autoComplete='off'
                                     value={bookDetails.edition}
                                     onChange={handleChange}
                                     placeholder='Esim. 1'
-                                    required
+                                    className={errors.edition ? 'input-error' : ''}
                                 />
+                                {errors.edition && <p className='error-p'>{errors.edition}</p>}
                             </div>
                         </div>
                     </div>
@@ -341,7 +379,7 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                             <div className='field'>
                                 <label htmlFor='coverType'>Kansityyppi</label>
                                 <select 
-                                    className='dropdown' 
+                                    className={`dropdown ${errors.coverType ? 'input-error' : ''}`} 
                                     name='coverType'
                                     id='coverType'
                                     value={bookDetails.coverType}
@@ -353,11 +391,12 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     <option value='Pehmeäkantinen'>Pehmeäkantinen</option>
                                     <option value='Pokkari'>Pokkari</option>
                                 </select>
+                                {errors.coverType && <p className='error-p'>{errors.coverType}</p>}
                             </div>
                             <div className='field'>
                                 <label htmlFor='condition'>Kunto</label>
                                 <select 
-                                    className='dropdown' 
+                                    className={`dropdown ${errors.condition ? 'input-error' : ''}`} 
                                     name='condition'
                                     id='condition'
                                     value={bookDetails.condition}
@@ -371,11 +410,12 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     <option value='Tyydyttävä'>Tyydyttävä</option>
                                     <option value='Heikko'>Heikko</option>                    
                                 </select>
+                                {errors.condition && <p className='error-p'>{errors.condition}</p>}
                             </div>
                             <div className='field'>
                                 <label htmlFor='isPerfect'>Täydellinen</label>
                                 <select 
-                                    className='dropdown' 
+                                    className={`dropdown ${errors.isPerfect ? 'input-error' : ''}`}
                                     name='isPerfect'
                                     id='isPerfect'
                                     value={bookDetails.isPerfect}
@@ -386,6 +426,7 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                     <option value='true'>Kyllä</option>
                                     <option value='false'>Ei</option>
                                 </select>
+                                {errors.isPerfect && <p className='error-p'>{errors.isPerfect}</p>}
                             </div>
                             <div className='field'>
                                 <label htmlFor='notes'>Huomiot</label>
@@ -402,16 +443,18 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
                                                 ? 'Esim. Kansipaperit puuttuu'
                                                 : 'Valitse ensin täydellisyys'}
                                     required={bookDetails.isPerfect !== 'true'}
-                                    disabled={bookDetails.isPerfect === 'true'}
+                                    disabled={bookDetails.isPerfect !== 'false'}
                                     autoComplete='off'
+                                    className={errors.notes ? 'input-error' : ''}
                                 />
+                                {errors.notes && <p className='error-p'>{errors.notes}</p>}
                             </div>
                         </div>
                     </div>
                 </>
             )}
             
-            <button className='submit-btn' type='submit' disabled={!isFormEdited && isEditMode}>{isEditMode ? 'Tallenna muutokset' : 'Lisää kirja'}</button>
+            <button className='submit-btn' type='submit' disabled={isEditMode && !isFormEdited}>{isEditMode ? 'Tallenna muutokset' : 'Lisää kirja'}</button>
         </form>
     )
 }

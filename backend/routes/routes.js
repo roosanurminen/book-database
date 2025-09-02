@@ -45,18 +45,18 @@ router.post('/api/login', async (req, res) => {
         const result = await db('users').where({email}).first();
 
         if (!result || !(await bcrypt.compare(password, result.password))) {
-            return res.status(401).json({message: 'Invalid credentials'})
+            console.log("Login failed: email not found", email);
+            return res.status(401).json({message: 'Sähköposti tai salasana virheellinen'})
         }
 
         const accessToken = jwt.sign({user_id: result.user_id}, process.env.JWT_SECRET, { expiresIn: '5m' });
-
         const refreshToken = jwt.sign({ user_id: result.user_id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '2d' });
 
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: false, // In production true
             sameSite: 'lax', // In production strict
-            maxAge: 300000 // 5 min
+            maxAge: 300000 //5 min
         });
 
         res.cookie('refreshToken', refreshToken, {
@@ -64,7 +64,7 @@ router.post('/api/login', async (req, res) => {
             secure: false, // In production true
             sameSite: 'lax', // In production strict
             path: '/api/refresh',
-            maxAge: 172800000 // 2 days
+            maxAge: 172800000 //2 days
         });
         res.json({message: 'Logged in', user: { user_name: result.user_name }});
     } catch (err) {
@@ -84,7 +84,7 @@ router.post('/api/refresh', (req, res) => {
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
 
         if (err) {
-            return res.status(403).json({ message: 'Invalid or expired refresh token' });
+            return res.status(401).json({ message: 'Invalid or expired refresh token' });
         }
         
         // Create new access token
@@ -95,7 +95,7 @@ router.post('/api/refresh', (req, res) => {
             httpOnly: true,
             secure: false, //True in production
             sameSite: 'lax', // In production strict
-            maxAge: 300000 // 5 min
+            maxAge: 300000 //5 min
         });
 
         res.json({message: 'Access token refreshed'});

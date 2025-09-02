@@ -1,4 +1,5 @@
 import { ToastContainer, toast } from 'react-toastify';
+import './ToastProvider.css';
 
 const ToastProvider = () => {
     return (
@@ -7,7 +8,8 @@ const ToastProvider = () => {
                 position="bottom-center"
                 autoClose={1000} // 1seconds
                 theme="light"
-                hideProgressBar='true'
+                hideProgressBar={true}
+                icon={false} 
             />
         </div>
     )
