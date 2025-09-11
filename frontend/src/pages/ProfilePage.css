@@ -1,13 +1,13 @@
 .profile-page {
     min-height: 100vh;
-    background-color: #F3F4F6;
+    background-color: #d9cebe;
 }
 
 .profile-form {
     color: #333;
     font-family: Georgia, serif;
-    background: white;
-    border-radius: 0.5rem;
+    background: #efeae3;
+    border-radius: 0.4rem;
     padding: 1rem;
     box-shadow: 0 10px 20px rgba(0,0,0,0.15);
     width: 100%;
@@ -25,21 +25,24 @@
 .profile-form h1 {
     text-align: center;
     font-size: 1.5rem;
+    color: #443627;
 }
 
 .profile-form input {
     padding: 5px;
     margin: 10px 0px;
-    border: 1px solid #ccc;
-    border-radius: 0.4rem;
+    border: none;
+    border-radius: 0.25rem;
     font-size: 0.9rem;
     width: 100%;
-    color: #333;
+    color: #443627;
     font-family: Georgia, serif;
+    background-color: #fdfdfc;
 }
 
 .profile-form label {
     font-size: 0.9rem;
+    color: #443627;
 }
 
 
@@ -48,18 +51,18 @@
     padding: 12px;
     margin-top: 10px;
     font-size: 1rem;
-    background-color: #99d1ff;
+    background-color: #BCA88D;
     transition: background-color 0.2s ease;
     color: white;
     border: none;
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     cursor: pointer;
     font-family: Georgia, serif;
 }
 
 
 .profile-form .submit-btn:hover {
-  background-color: #66b8ff;
+  background-color: #B99470;
 }
 
 
@@ -96,4 +99,9 @@
     .profile-form .submit-btn, .profile-form .submit-btn:disabled {
         font-size: 0.85rem;
     }
+
+    .profile-form .submit-btn:active, .profile-form .submit-btn:focus {
+        background-color: #B99470;
+    }
+
 }

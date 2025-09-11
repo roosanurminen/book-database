@@ -2,6 +2,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: Georgia, serif;
 }
 
 .register-page {
@@ -9,16 +10,15 @@
     align-items: center;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #F3F4F6;
-    font-family: Georgia, serif;
+    background-color: #F5EEDC;
     padding: 20px;
 }
 
 .register-container {
-    background: white;
-    border-radius: 0.5rem;
+    background-color: #F8F3E4; 
+    border-radius: 0.4rem;
     padding: 2rem;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 400px;
     text-align: center;
@@ -53,9 +53,11 @@
     padding: 16px 20px;
     margin: 20px 0px;
     border: 1px solid #ccc;
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     font-size: 1rem;
     width: 100%;
+    color: #333;
+    background-color: #F8F3E4;
 }
 
 
@@ -64,25 +66,26 @@
     padding: 12px;
     margin-top: 10px;
     font-size: 1rem;
-    background-color: #99d1ff;
+    background-color: #BCA88D;
     color: white;
     border: none;
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
 .register-page button:hover {
-    background-color: #66b8ff;
+    background-color: #B99470;
+    box-shadow: 0 12px 16px rgba(0,0,0,0.1);
 }
 
 
 .register-page input.input-error {
-    border: 1px solid #ff6666;
+    border: 1px solid #A94A4A;
 }
 
 .register-page .error-p {
-    color: #ff6666;
+    color: #A94A4A;
     font-size: 0.85rem;
     text-align: left;
     margin-top: -15px;
@@ -103,7 +106,6 @@
         font-size: 1rem;
     }
 
-
     .register-form-title {
         font-size: 1.2rem;
     }
@@ -112,12 +114,18 @@
         font-size: 0.85rem;
     }
 
+    .register-page .error-p {
+        font-size: 0.75rem;
+    }
+
+
     .register-page button {
         font-size: 0.85rem;
     }
 
     .register-page button:active, .register-page button:focus {
-        background-color: #66b8ff;
+        background-color: #B99470;
+        box-shadow: 0 12px 16px rgba(0,0,0,0.1);
     }
 
 }

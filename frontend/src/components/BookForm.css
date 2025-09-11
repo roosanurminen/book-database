@@ -1,13 +1,14 @@
 * {
     font-family: Georgia, serif;
+    
 }
 
 .book-form {
     color: #333;
-    background: white;
-    border-radius: 0.5rem;
+    background: #efeae3;
+    border-radius: 0.4rem;
     padding: 1rem;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 800px;
     margin-top: 15px;
@@ -39,33 +40,35 @@
 .radio {
     display: flex;
     margin-bottom: 1.5rem;
+    color: #443627;
+    accent-color: #B99470;
 }
 
 .book-form input {
     padding: 5px;
     margin: 10px 0px;
-    border: 1px solid #ccc;
-    border-radius: 0.4rem;
+    border: none;
+    border-radius: 0.25rem;
     font-size: 0.9rem;
     width: 100%;
-    color: #333;
+    color: #443627;
+    background-color: #fdfdfc;
 }
 
 .book-form .option-dropdown {
-    background: white;
-    border: 1px solid #ccc;
+    background-color: #fdfdfc;
+    border: none;
     width: 100%;
     overflow-y: auto;
-    color: #333;
+    color: #443627;
     font-size: 0.85rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     font-family: Georgia, serif;
     padding: 2px;
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     margin: 0px 0px;
     max-height: 200px; 
 }
-
 
 .book-form .option {
     padding: 5px;
@@ -73,19 +76,23 @@
 }
 
 .book-form .option:hover {
-    background-color: #F3F4F6;
+    background-color: #e8e1d7;
+}
+
+.select .dropdown {
+    color: red;
 }
 
 .book-form .dropdown {
     padding: 5px;
     margin: 10px 0px;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 0.4rem;
+    background-color: #fdfdfc;
+    border: none;
+    border-radius: 0.25rem;
     font-size: 0.9rem;
     cursor: pointer;
     width: 100%;
-    color: #333;
+    color: #443627;
 }
 
 .submit-btn {
@@ -93,16 +100,16 @@
     padding: 12px;
     margin-top: 10px;
     font-size: 1rem;
-    background-color: #99d1ff;
-    color: white;
+    background-color: #BCA88D;
+    color: #fdfdfc;
     border: none;
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
 .submit-btn:hover {
-    background-color: #66b8ff;
+    background-color: #B99470;
 }
 
 
@@ -111,11 +118,11 @@
     padding: 12px;
     margin-top: 10px;
     font-size: 1rem;
-    background-color: #f5f5f5;
+    background-color: #f6f3f0;
     color: #999;
-    border: none;
-    border-radius: 0.4rem;
     cursor: not-allowed;
+    border: none;
+    border-radius: 0.25rem;
 }
 
 .author-btn {
@@ -125,32 +132,32 @@
     padding: 5px;
     margin: 25px 0px;
     font-size: 1rem;
-    background-color: #99d1ff;
-    color: white;
+    background-color: #73aecc;
+    color: #fdfdfc;
     border: none;
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
 .author-btn:hover {
-    background-color: #66b8ff;
+    background-color: #4493bb;
 }
 
 .remove-btn {
     min-width: 2.5rem;
     padding: 5px;
     font-size: 1rem;
-    background-color: #ff9999;
-    color: white;
+    background-color: #fb959c;
+    color: #fdfdfc;
     border: none;
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
 .remove-btn:hover {
-    background-color: #ff6666;
+    background-color: #ef5a6f;
 }
 
 .author-field {
@@ -159,7 +166,7 @@
 }
 
 input:disabled {
-    background-color: #f5f5f5;
+    background-color: #f6f3f0;
     color: #999;
     cursor: not-allowed;
 }
@@ -168,10 +175,27 @@ input:disabled {
     margin: 10px 0px;
     font-size: 0.9rem;
     width: 100%;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0.25rem !important;
+    background-color: #fdfdfc !important;
+    color: #443627 !important; 
+}
+
+.dropdown__option--is-focused {
+    background-color: #e8e1d7 !important;
+}
+
+.dropdown__menu {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
+    border-radius: 0.25rem !important;
+    background-color: #fdfdfc !important;
+    color: #443627 !important; 
 }
 
 .dropdown__control:hover {
     cursor: pointer;
+    
 }
 
 .basic-group {
@@ -201,11 +225,11 @@ input:disabled {
 
 
 .book-form input.input-error, .book-form select.input-error, .input-error .dropdown__control {
-    border: 1px solid #ff6666;
+    border: 1px solid #A94A4A;
 }
 
 .book-form .error-p {
-    color: #ff6666;
+    color: #A94A4A;
     font-size: 0.75rem;
     text-align: left;
     margin-top: -8px;
@@ -232,7 +256,6 @@ input:disabled {
         width: 100%;
         margin: 2px 0px;
         font-size: 0.85rem;
-        
     }
 
     .remove-btn {
@@ -247,15 +270,15 @@ input:disabled {
     }
 
     .author-btn:active, .author-btn:focus {
-        background-color: #66b8ff;
+        background-color: #4493bb;
     }
 
     .remove-btn:active, .remove-btn:focus {
-        background-color: #ff6666;
+        background-color: #ef5a6f;
     }
 
     .submit-btn:active, .submit-btn:focus {
-        background-color: #66b8ff;
+        background-color: #B99470;
     }
 
     .book-form .option:active, .book-form .option:focus {

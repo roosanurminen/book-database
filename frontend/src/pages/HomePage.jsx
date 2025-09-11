@@ -4,14 +4,12 @@ import NavBar from '../components/NavBar';
 import './HomePage.css';
 import { useEffect, useState } from 'react';
 import BookList from '../components/BookList';
-//import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
 
 const HomePage = () => {
     const { authState } = useAuth();
-    //const user_name = authState.user?.user_name;
 
     const [books, setBooks] = useState({books: [], authorName: '', seriesFull: [], missingBooks: []});
     const [category, setCategory] = useState('all');
@@ -113,7 +111,6 @@ const HomePage = () => {
     return (
         <div className='home-page'>
             <NavBar resetHomePage={resetHomePage}/>
-            {/*<h2 className='home-header'>Helloota {user_name}</h2>*/}
             <div className='search'>
                 <SearchPanel 
                     setBooks={setBooks}

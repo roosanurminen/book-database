@@ -19,14 +19,20 @@
 .search-panel .dropdown {
     padding: 10px;
     font-size: 1rem;
-    background-color: white;
-    border-radius: 0.4rem;
-    border: 1px solid #ccc;
-    color: #333;
+    background-color: #fdfdfc;
+    border-radius: 0.25rem;
+    /*border: 1px solid #ccc;*/
+    border: none;
+    color: #443627;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     flex: 0 0 150px;
 }
+
+.search-panel .dropdown select option:hover {
+    background-color: #e8e1d7 !important;
+}
+
 
 .searchbar {
     display: flex;
@@ -36,55 +42,60 @@
 .searchbar input {
     flex: 1;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 0.4rem;
+    border: none;
+    background-color: #fdfdfc;
+    border-radius: 0.25rem;
     font-size: 1rem;
     width: 100%;
     min-width: 0;
-    color: #333;
+    color: #443627;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     font-family: Georgia, serif;
     flex: 1;
 }
 
+.searchbar input:disabled {
+    background-color: #f6f3f0;
+}
+
 .search-button {
     padding: 10px;
     font-size: 1rem;
-    color: white;
+    color: #fdfdfc;
     border: none;
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     flex-shrink: 0; 
     width: auto;
     flex: 0 0 auto;
-    background-color: #99d1ff;
+    background-color: #BCA88D;
     transition: background-color 0.2s ease;
 }
 
 .search-button:disabled {
-    background-color: #f5f5f5;
+    background-color: #f6f3f0;
     color: #999;
     cursor: not-allowed;
 }
 
 
-.search-button:hover {
-  background-color: #66b8ff;
+.search-button:hover:enabled {
+  background-color: #B99470;
 }
 
 
 .search-results {
-    background: white;
-    border: 1px solid #ccc;
-    width: 80%;
+    background-color: #fdfdfc;
+    border: none;
+    width: 100%;
     overflow-y: auto;
-    color: #333;
+    color: #443627;
     font-size: 1rem;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     font-family: Georgia, serif;
     padding: 0.5rem;
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     margin: 1rem auto;
     max-height: 200px;
 }
@@ -95,7 +106,7 @@
 }
 
 .search-option:hover {
-    background-color: #F3F4F6;
+    background-color: #e8e1d7;
 }
 
 @media only screen and (max-width: 767px) {
@@ -110,6 +121,11 @@
         flex-direction: column;
         gap: 0.5rem;
     }
+
+    .search-results {
+        width: 90%;
+    }
+
 
     .search-panel .dropdown {
         flex: none;
@@ -132,8 +148,8 @@
         border: none;
     }
 
-    .search-button:active {
-        background-color: #66b8ff;
+    .search-button:active:enabled, .search-button:focus:enabled {
+        background-color: #B99470;
     }
 
 }

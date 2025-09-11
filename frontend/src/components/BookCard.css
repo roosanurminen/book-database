@@ -8,16 +8,22 @@
 
 .book-card {
     display: grid;
-    color: #333;
+    color: #443627;
     font-family: Georgia, serif;
-    background: #fff;
-    border-radius: 0.5rem;
+    background-color: #efeae3;
+    border-radius: 0.4rem;
     padding: 0.5rem;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 800px;
     cursor: pointer;
 }
+
+
+.book-card.missing {
+    background-color: #A89F90;/* #EBE8DB; #EEEDEB  #B0A695*/
+}
+
 
 .book-title {
     font-size: 1rem;

@@ -4,7 +4,7 @@
 
 
 .home-page {
-    background-color: hsl(220, 14%, 96%);
+    background-color: #d9cebe;
     min-height: 100vh;
     overflow-y: auto;
 }

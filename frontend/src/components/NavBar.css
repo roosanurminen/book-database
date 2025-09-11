@@ -1,6 +1,5 @@
 * {
     box-sizing: border-box;
-    
 }
 
 body {
@@ -12,7 +11,7 @@ body {
 }
 
 .nav {
-    background-color: #333333;
+    background-color: #d9cebe;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -22,28 +21,29 @@ body {
     position: fixed; 
     top: 0;
     z-index: 1000;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
 .nav a {
-    color: #d9d9d9;
+    color: #443627;
     margin: 0 1rem;
     text-decoration: none;
-}
-
-.nav a:hover {
-    color: #fff;
-}
-
-.go-home {
-    font-size: 1.5rem;
-    margin-left: 1rem;
-    color: #d9d9d9;
-    cursor: pointer;
     
 }
 
+.nav a:hover {
+    color: #6b4f3c;
+}
+
+.go-home {
+    font-size: 1.7rem;
+    margin-left: 1rem;
+    color: #443627;
+    cursor: pointer;
+}
+
 .go-home:hover {
-    color: #fff;
+    color: #6b4f3c;
 }
 
 .desktop-nav-right {
@@ -54,7 +54,7 @@ body {
 }
 
 .nav button {
-    color: #d9d9d9;
+    color: #443627;
     border: none;
     background: none;
     cursor: pointer;
@@ -63,7 +63,7 @@ body {
 }
 
 .nav button:hover {
-    color: #fff;
+    color: #6b4f3c;
 }
 
 .hamburger-btn, .mobile-menu {
@@ -90,7 +90,7 @@ body {
         width: 100%;
         height: 0.2rem;
         border-radius: 2px;
-        background-color: #d9d9d9;
+        background-color: #443627;
         transition: all 0.3s ease;
         position: absolute;
     }
@@ -117,7 +117,7 @@ body {
     .mobile-menu {
         position: fixed;
         display: flex;
-        background-color: #333;
+        background-color: #d9cebe;
         width: 100vw;
         height: calc(100vh - 60px);
         top: 60px;
@@ -141,16 +141,16 @@ body {
         max-width: 300px;
         text-align: left;
         font-size: 1.2rem;
-        color: #d9d9d9;
+        color: #443627;
         transition: all 0.2s ease;
         padding-left: 1rem;
     }
 
     .go-home {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
     }
 
     .menu-links a:active, .menu-links button:active,.menu-links a:focus, .menu-links button:focus, .go-home:active, .go-home:focus {
-        color:  #fff;
+        color:  #6b4f3c;
     }
 }

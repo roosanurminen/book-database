@@ -81,6 +81,7 @@ const BookList = ({ books, authorName, seriesFull, missingBooks, category, searc
         const sortBooks = bookSeries(combinedBooks);
         
         hasSeries = sortBooks.some(book => book.series_name !== null);
+        
 
         if (!hasSeries) {
             content = (
@@ -96,7 +97,7 @@ const BookList = ({ books, authorName, seriesFull, missingBooks, category, searc
                             )}
                         </div>
                         {sortBooks.map(book => (
-                            <BookCard key={`${book.is_missing ? 'missing' : 'owned'}-${book.book_id}`} book={book} showAuthor={false} onClick={() => setSelectedBook(book)}/>
+                            <BookCard key={`${book.is_missing ? 'missing' : 'owned'}-${book.book_id}`} book={book} showAuthor={false} isMissing={book.is_missing} onClick={() => setSelectedBook(book)}/>
                         ))}
                     </div>
                 </div>
@@ -136,7 +137,7 @@ const BookList = ({ books, authorName, seriesFull, missingBooks, category, searc
                                 prevSeries=book.series_name;
                             }
                             
-                            order.push(<BookCard key={`${book.is_missing ? 'missing' : 'owned'}-${book.book_id}`} book={book} showSeriesPart={true} showAuthor={false} onClick={() => setSelectedBook(book)}/>)
+                            order.push(<BookCard key={`${book.is_missing ? 'missing' : 'owned'}-${book.book_id}`} book={book} showSeriesPart={true} showAuthor={false} isMissing={book.is_missing} onClick={() => setSelectedBook(book)}/>)
                             return order;
                         })}
                     </div>
@@ -212,7 +213,8 @@ const BookList = ({ books, authorName, seriesFull, missingBooks, category, searc
                         {sortBooks.map(book => (
                             <BookCard 
                                 key={`${book.is_missing ? 'missing' : 'owned'}-${book.book_id}`} 
-                                book={book} 
+                                book={book}
+                                isMissing={book.is_missing} 
                                 onClick={() => setSelectedBook(book)}
                             />
                         ))}
@@ -254,7 +256,7 @@ const BookList = ({ books, authorName, seriesFull, missingBooks, category, searc
                                 prevSeries=book.series_name;
                             }
                             
-                            order.push(<BookCard key={`${book.is_missing ? 'missing' : 'owned'}-${book.book_id}`} book={book} showSeriesPart={true} onClick={() => setSelectedBook(book)}/>)
+                            order.push(<BookCard key={`${book.is_missing ? 'missing' : 'owned'}-${book.book_id}`} book={book} showSeriesPart={true} isMissing={book.is_missing} onClick={() => setSelectedBook(book)}/>)
                             return order;
                         })}
                     </div>

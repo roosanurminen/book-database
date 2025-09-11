@@ -84,6 +84,8 @@ const BookModal = ({ book, onClose, handleEdit, handleAdd, handleDelete, handleM
                     </>
                 ) : (
                 <>
+                    <button className='close-btn' onClick={onClose}>x</button>
+                    <h2>{book.book_title}</h2>
                     <h4>Puuttuvan kirjan tiedot:</h4>
                     <p>Kirjailija(t): {book.author_names}</p>
                     <p>Kuuluu sarjaan: {book.series_name ?? '-'}</p>

@@ -1,6 +1,6 @@
 .modal {
     position: fixed;
-    top: 0;
+    top: 25px;
     left: 0;
     width: 100%;
     height: 100vh;
@@ -17,11 +17,11 @@
     padding: 32px;
     width: 100%;
     max-width: 640px;
-    background-color: #fff;
-    border-radius: 0.5rem;
+    background-color: #efeae3;
+    border-radius: 0.4rem;
     overflow-y: auto;
     max-height: 90vh;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    box-shadow:  0 8px 25px rgba(0,0,0,0.1);
 }
 
 
@@ -33,12 +33,13 @@
     border: none;
     font-size: 24px;
     cursor: pointer;
+    color: #443627;
 }
 
 .modal-content h2 {
     margin-bottom: 20px;
     font-size: 24px;
-    color: #333;
+    color: #443627;
     font-family: Georgia, serif;
 }
 
@@ -47,7 +48,7 @@
     margin-top: 20px;
     margin-bottom: 6px;
     font-size: 18px;
-    color: #333;
+    color: #443627;
     font-family: Georgia, serif;
 }
 
@@ -55,7 +56,7 @@
     margin: 4px 0;
     font-size: 16px;
     line-height: 1.5;
-    color: #333;
+    color: #443627;
     font-family: Georgia, serif;
 }
 
@@ -69,35 +70,37 @@
     cursor: pointer;
     border: none;
     font-family: Georgia, serif;
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     font-size: 14px;
     padding: 12px;
-    background-color: #e0f0ff;
+    background-color: #73aecc;
+    color: #fdfdfc;
 }
 
 .edit-btn:hover {
-  background-color: #c0e3ff;
+  background-color: #4493bb;
 }
 
 .delete-btn {
     cursor: pointer;
     border: none;
     font-family: Georgia, serif;
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     font-size: 14px;
     padding: 12px;
-    background-color: #ffe5e5; 
+    background-color: #fb959c ;
+    color: #fdfdfc; 
 }
 
 .delete-btn:hover {
-  background-color: #ffcccc;
+  background-color: #ef5a6f;
 }
 
 
 @media only screen and (max-width: 767px) {
 
     .modal {
-        padding: 20px;
+        padding: 10px 20px;
     }
 
     .modal-content {
@@ -127,7 +130,7 @@
     }
 
     .edit-btn:active, .edit-btn:focus {
-        background-color: #c0e3ff;
+        background-color: #4493bb;
     }
 
     .delete-btn {
@@ -135,7 +138,7 @@
     }
 
     .delete-btn:active, .delete-btn:focus {
-    background-color: #ffcccc;
+    background-color: #ef5a6f;
     }
 
 }

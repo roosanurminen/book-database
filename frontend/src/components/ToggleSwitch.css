@@ -2,10 +2,11 @@
   display: flex;
   align-items: center;
   gap: 3px;
+  accent-color: #B99470;
 }
 
 .toggle-label {
-  font-size: 0.9rem;
-  color: #333;
+  font-size: 1rem;
+  color: #443627;
   font-family: Georgia, serif;
 }
