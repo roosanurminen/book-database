@@ -1,7 +1,6 @@
-//import axios from 'axios';
 import { useRef, useState, useEffect} from 'react';
 import BookForm from '../components/BookForm'
-import './NewBookPage.css'
+import './MissingBookPage.css'
 import NavBar from '../components/NavBar';
 import { toast } from 'react-toastify';
 import axiosInstance from '../api/axiosInstance';
@@ -94,7 +93,7 @@ const MissingBookPage = () => {
             
 
         } catch (error) {
-            console.log('fetchMatchingData', error);
+           toast.error('Ehdotusten haku epäonnistui', {autoClose: 3000});
         }
     }
 
@@ -229,7 +228,6 @@ const MissingBookPage = () => {
     }
 
     const onSeriesChange = async (e) => {
-        //setSeriesIsChecked(!isSeriesChecked);
         setSeriesIsChecked(prev => {
             const newValue = !prev;
             if (!newValue) {
@@ -251,7 +249,6 @@ const MissingBookPage = () => {
     }
 
     const onGroupChange = async (e) => {
-        //setGroupIsChecked(!isGroupChecked);
         setGroupIsChecked(prev => {
             const newValue = !prev;
             if (!newValue) {
@@ -363,14 +360,14 @@ const MissingBookPage = () => {
             clearForm();
 
         } catch (error) {
-            console.log('handlesubmit newbook err:', error);
+            toast.error('Kirjan lisääminen epäonnistui.', {autoClose: 3000});
         }
     }
 
     return (
-        <div className='new-book-page'>
+        <div className='missing-book-page'>
             <NavBar />
-            <div className='new-book-container'>
+            <div className='missing-book-container'>
                 <BookForm 
                     bookDetails={bookDetails} 
                     handleChange={handleChange} 

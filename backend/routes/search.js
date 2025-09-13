@@ -39,11 +39,13 @@ async function getBooksByAuthor (req, res) {
 
         let authors;
         if (exact) {
-            authors = await db('user_books_detail').where('user_id', userId).andWhere('norm_authors', normSearch);
+            
+            authors = await db('user_books_detail')
+                .where('user_id', userId)
+                .andWhereRaw(`? = ANY(string_to_array(norm_authors, ','))`, [normSearch]);
         } else {
             authors = await db('user_books_detail').where('user_id', userId).andWhere('norm_authors', 'ilike', `%${normSearch}%`);
         }
-
         res.json(authors);
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
@@ -92,10 +94,8 @@ async function getAllMissingBooks(req, res) {
     try {
         const userId = req.user_id;
         const missingBooks = await db('user_missing_books').where('user_id', userId);
-        console.log("helloo")
         res.json(missingBooks);
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 }

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import Dropdown from './Dropdown';
 import SearchBar from './SearchBar';
-//import axios from 'axios';
 import './SearchPanel.css';
 import axiosInstance from '../api/axiosInstance';
+import { toast } from 'react-toastify';
 
 const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchValue, setSubmitValue, setHasSearched  }) => {
 
@@ -17,7 +17,7 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
             return response.data;
 
         } catch (error) {
-             console.log('isSeriesFull', error);
+            toast.error('Sarjan tietoja ei saatu haettua!', {autoClose: 3000});
         }
 
     }
@@ -31,7 +31,7 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
             return response.data;
 
         } catch (error) {
-             console.log('isSeriesFull', error);
+            toast.error('Puuttuvia kirjoja ei voitu hakea!', {autoClose: 3000});
         }
     }
 
@@ -49,7 +49,6 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
                 const seriesArray = await isSeriesFull(value);
                 const mbooksArray = await missingBooks(value);
 
-                console.log("missing:", mbooksArray)
                 for (const book of data) {
                     const normAuthors = book.norm_authors.split(',').map(name => name.trim());
                     const authors = book.author_names.split(',').map(name => name.trim());
@@ -65,14 +64,13 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
                 const seriesArray = await isSeriesFull(value);
                 const mbooksArray = await missingBooks(value);
 
-                console.log("missing:", mbooksArray)
                 setBooks({ books: data, authorName: '', seriesFull: seriesArray, missingBooks: mbooksArray});
             } else {
                 setBooks({ books: data, authorName: '', seriesFull: [], missingBooks: [] });
             }
 
         } catch (error) {
-            console.log('fetchSearch', error);
+            toast.error('Haku epäonnistui!', {autoClose: 3000});
         }
     }
 
@@ -124,7 +122,7 @@ const SearchPanel = ({ setBooks, category, setCategory, searchValue, setSearchVa
             
 
         } catch (error) {
-            console.log('fetchMatchingData', error);
+            toast.error('Ehdotusten haku epäonnistui', {autoClose: 3000});
         }
     }
 

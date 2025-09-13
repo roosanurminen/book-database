@@ -22,23 +22,25 @@ const HomePage = () => {
 
     useEffect(() => {
         setShowAlsoMissing(false);
-    }, [category]);
+    }, [category, submitValue]);
 
 
     let showToggle = false;
     
     if (hasSearched && books.missingBooks.length > 0) {
         showToggle = true;
+    } else {
+        showToggle = false;
     }
 
     
-    const fetchAllBooks = async (value) => {
+    const fetchAllBooks = async () => {
         try {
             const response = await axiosInstance.get('http://localhost:5000/api/search/all');
             setBooks({ books: response.data, authorName: '', seriesFull: [], missingBooks: [] });
             setHasSearched(false);
         } catch (err) {
-            console.log('Failed to fetch all books', err);
+            toast.error('Kirjojen hakeminen epäonnistui.', {autoClose: 3000});
         }
     }
 
@@ -82,7 +84,7 @@ const HomePage = () => {
             toast.success('Kirja poistettu!');
            
         } catch (error) {
-            console.log('handledelete err:', error);
+            toast.error('Kirjan poistaminen epäonnistui.', {autoClose: 3000});
         }
     }
 
@@ -103,7 +105,7 @@ const HomePage = () => {
             toast.success('Kirja poistettu!');
            
         } catch (error) {
-            console.log('handledelete err:', error);
+            toast.error('Kirjan poistaminen epäonnistui.', {autoClose: 3000});
         }
     }
 

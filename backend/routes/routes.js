@@ -29,7 +29,6 @@ router.post('/api/register', async (req, res) => {
 
         res.status(200).json({message: 'Added user'});
     } catch (err) {
-        console.error(err);
         if (err.code === '23505') {
             res.status(400).json({ message: 'Sähköposti on jo käytössä' });
         } else {
@@ -45,7 +44,6 @@ router.post('/api/login', async (req, res) => {
         const result = await db('users').where({email}).first();
 
         if (!result || !(await bcrypt.compare(password, result.password))) {
-            console.log("Login failed: email not found", email);
             return res.status(401).json({message: 'Sähköposti tai salasana virheellinen'})
         }
 
@@ -68,7 +66,6 @@ router.post('/api/login', async (req, res) => {
         });
         res.json({message: 'Logged in', user: { user_name: result.user_name }});
     } catch (err) {
-        console.error('Error logging in:', err);
         res.status(500).json({error: 'Server error'})
     }
 });
@@ -111,7 +108,6 @@ router.get('/api/check-auth', authMiddleware, async (req, res) => {
             user: { user_name: user.user_name }
         });
     } catch (error) {
-        console.error(err);
         res.status(500).json({ error: 'Server error' });
     }
 });
@@ -141,12 +137,10 @@ router.get('/api/profile', authMiddleware, async(req, res) => {
     try {
         const userId = req.user_id;
         const userData = await db('users').where('user_id', userId).first();
-        //console.log(userData)
         res.json({
             username: userData.user_name,
             email: userData.email});
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Server error updating profile' });
     }
 });
@@ -161,7 +155,6 @@ router.put('/api/profile', authMiddleware, async(req, res) => {
         });        
         res.json({message: 'User data updated correctly'});
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Server error updating profile' });
     }
 });
@@ -172,10 +165,8 @@ router.get('/api/books', authMiddleware, async(req, res) => {
     try {
         const userId = req.user_id;
         const usersBooks = await db('user_books_detail').where('user_id', userId);
-        //console.log(usersBooks);        
         res.json(usersBooks);
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Server error updating profile' });
     }
 });
@@ -224,7 +215,6 @@ router.delete('/api/delete-book', authMiddleware, async(req, res) => {
         res.json('Book deleted succesfully');
 
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Server error deleting book' });
     }
 });
@@ -260,7 +250,6 @@ router.get('/api/edit-book', authMiddleware, async(req, res) => {
             notes: bookData.notes
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Server error while retrieving book' });
     }
 });
@@ -283,8 +272,6 @@ router.get('/api/claim-book', authMiddleware, async(req, res) => {
             return res.status(404).json({ message: 'Book not found or access denied' });
         }
 
-        console.log(bookData.series_name)
-
         res.json({
             title: bookData.book_title,
             authors: bookData.author_names,
@@ -294,7 +281,6 @@ router.get('/api/claim-book', authMiddleware, async(req, res) => {
             group: bookData.group_name
         });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Server error while retrieving book' });
     }
 });
@@ -314,18 +300,17 @@ router.delete('/api/delete-missing', authMiddleware, async(req, res) => {
         await db('missing_books').where('book_id', bookId).del();
         res.json('Book deleted succesfully');
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Server error deleting book' });
     }
-})
+});
 
-// Get are authors series full
+// Authors series full or not
 router.get('/api/series-full/author', authMiddleware, getAuthorsSeries);
 
-// Get is the series full
+// Is the series full
 router.get('/api/series-full/series', authMiddleware, getSeries);
 
-// Get are groups series full
+// Groups series full or not
 router.get('/api/series-full/group', authMiddleware, getGroupsSeries);
 
 

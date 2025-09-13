@@ -1,7 +1,6 @@
 import BookForm from '../components/BookForm'
 import NavBar from '../components/NavBar';
 import { useEffect, useState, useRef } from 'react';
-//import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -100,7 +99,6 @@ const ClaimBookPage = () => {
                 };
 
                 setBookDetails(data);
-                //setOriginalBookDetails(data);
 
                 if (data.seriesName !== '') {
                     setSeriesIsChecked(true)
@@ -111,7 +109,7 @@ const ClaimBookPage = () => {
                 }
                 
             } catch (error) {
-                console.log("hahhaaa", error);
+                toast.error('Kirjan tietojen haku epäonnistui.', {autoClose: 3000});
             }
         }
         getBookData();
@@ -156,7 +154,7 @@ const ClaimBookPage = () => {
             
 
         } catch (error) {
-            console.log('fetchMatchingData', error);
+            toast.error('Ehdotusten haku epäonnistui', {autoClose: 3000});
         }
     }
 
@@ -321,17 +319,6 @@ const ClaimBookPage = () => {
     }
 
     const onSeriesChange = async (e) => {
-        //setSeriesIsChecked(!isSeriesChecked);
-
-        /*if (!isSeriesChecked === false) {
-            setBookDetails(prev => ({
-                ...prev,
-                seriesName: '',
-                seriesPart: '',
-                seriesTotalBooks: ''
-            }));
-        }*/
-
         setSeriesIsChecked(prev => {
             const newValue = !prev;
             if (!newValue) {
@@ -355,15 +342,6 @@ const ClaimBookPage = () => {
     }
 
     const onGroupChange = async (e) => {
-        /*setGroupIsChecked(!isGroupChecked);
-
-        if (!isGroupChecked === false) {
-            setBookDetails(prev => ({
-                ...prev,
-                group: ''            
-            }));
-        }*/
-
         setGroupIsChecked(prev => {
             const newValue = !prev;
             if (!newValue) {
@@ -519,7 +497,7 @@ const ClaimBookPage = () => {
             navigate('/');
 
         } catch (error) {
-            console.log('handlesubmit newbook err:', error);
+            toast.error('Kirjan lisääminen epäonnistui.', {autoClose: 3000});
         }
     }
 

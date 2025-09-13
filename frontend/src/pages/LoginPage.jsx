@@ -3,6 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -51,19 +52,17 @@ const LoginPage = () => {
             const response = await axios.post('http://localhost:5000/api/login', requestBody, {
                 withCredentials: true,
             });
-            console.log("handleSubmit log", response);
             setAuthState({
                 isAuthenticated: true,
                 user: response.data.user
             });
             navigate('/')
         } catch (error) {
-            console.log("handleSubmit err:", error);
-
             if (error.response && error.response.data?.message) {
                 setErrors(prev => ({ ...prev, err: error.response.data.message }));
+                toast.error(error.response.data.message, {autoClose: 3000})
             } else {
-                alert('Tapahtui palvelinvirhe');
+                toast.error('Tapahtui palvelinvirhe', {autoClose: 3000});
             }
         }
     }

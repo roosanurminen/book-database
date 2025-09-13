@@ -8,7 +8,6 @@ async function getMissingByAuthor (req, res) {
                 
         res.json(response);
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 }
@@ -22,7 +21,6 @@ async function getMissingBySeries (req, res) {
         res.json(response);
         
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 }
@@ -35,7 +33,6 @@ async function getMissingByGroup (req, res) {
         const response = await db('user_missing_books').where('user_id', userId).andWhere('group_name', 'ilike', `%${search}%`);
         res.json(response);
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 }

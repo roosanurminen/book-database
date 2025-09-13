@@ -41,7 +41,6 @@ async function addMissingBook (req, res) {
         res.json({message: 'Book added'});
 
     } catch (err) {
-        console.error('Error adding new book: ', err);
         res.status(500).json({error: 'Server error'})
     }
 }

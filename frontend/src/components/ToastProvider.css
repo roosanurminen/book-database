@@ -7,6 +7,7 @@
     text-align: center; 
     font-size: 1.1rem; 
     background-color: #fdfdfc;
+    border-radius: 0.25rem;
 }
 
 
@@ -14,4 +15,18 @@
     color: #443627;
     opacity: 1;
     font-size: 1rem;        
+}
+
+
+ @media only screen and (max-width: 600px) {
+    .Toastify__toast {
+        font-size: 0.85rem;
+        width: 90%;
+        margin: 20px auto;
+    }
+
+
+    .Toastify__close-button {
+        font-size: 0.85rem;        
+    }
 }

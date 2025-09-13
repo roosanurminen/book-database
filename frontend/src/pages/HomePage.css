@@ -2,7 +2,6 @@
     box-sizing: border-box;
 }
 
-
 .home-page {
     background-color: #d9cebe;
     min-height: 100vh;
@@ -14,10 +13,6 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
-}
-
-.home-header {
-    color: #333;
 }
 
 .books {

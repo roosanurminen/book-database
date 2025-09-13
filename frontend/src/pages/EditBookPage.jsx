@@ -135,7 +135,7 @@ const EditBookPage = () => {
                 }
                 
             } catch (error) {
-                console.log("hahhaaa", error);
+                toast.error('Kirjan tietojen haku epäonnistui.', {autoClose: 3000});
             }
         }
         getBookData();
@@ -196,7 +196,7 @@ const EditBookPage = () => {
             
 
         } catch (error) {
-            console.log('fetchMatchingData', error);
+            toast.error('Ehdotusten haku epäonnistui.', {autoClose: 3000});
         }
     }
 
@@ -530,7 +530,7 @@ const EditBookPage = () => {
             navigate('/');
 
         } catch (error) {
-            console.log('handlesubmit newbook err:', error);
+            toast.error('Kirjan lisääminen epäonnistui.', {autoClose: 3000});
         }
     }
 

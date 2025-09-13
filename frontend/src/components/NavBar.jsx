@@ -1,10 +1,10 @@
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-//import axios from 'axios';
 import axiosInstance from '../api/axiosInstance';
 import './NavBar.css';
 import { useState } from 'react';
 import ConfirmModal from './ConfirmModal';
+import { toast } from 'react-toastify';
 
 
 const NavBar = ( {resetHomePage} ) => {
@@ -23,14 +23,13 @@ const NavBar = ( {resetHomePage} ) => {
         e.preventDefault();
         try {
             const response = await axiosInstance.post('/logout')
-            console.log('handleLogout log', response);
             setAuthState({
                 isAuthenticated: false,
                 user: null
             });
             navigate('/login');
         } catch (error) {
-            console.log('handleLogout err', error);
+            toast.error('Kirjautuminen ulos epäonnistui.', {autoClose: 3000});
         }
     };
 

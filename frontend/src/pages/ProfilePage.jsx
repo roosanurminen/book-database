@@ -1,4 +1,3 @@
-//import axios from 'axios';
 import { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import { toast } from 'react-toastify';
@@ -29,7 +28,7 @@ const Profile = () => {
                 setUserData(data);
                 setFormData(data);
             } catch (error) {
-                console.log(error);
+                toast.error('Tietojen haku epäonnistui.', {autoClose: 3000})
             }
         }
         getUserData();
@@ -59,7 +58,7 @@ const Profile = () => {
             toast.success('Profiili päivitetty onnistuneesti!');
             setUserData((prev) => ({...prev, username: formData.username}))
         } catch (error) {
-            console.log(error); 
+            toast.error('Profiilin päivitys epäonnistui.', {autoClose: 3000});
         }
     }
         

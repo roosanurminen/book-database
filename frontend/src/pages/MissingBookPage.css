@@ -1,0 +1,13 @@
+body {
+    margin: 0;
+}
+
+.missing-book-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #d9cebe;
+    margin-top: 0;
+    padding: 80px 1rem 2rem
+}

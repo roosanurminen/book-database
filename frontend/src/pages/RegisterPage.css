@@ -10,12 +10,12 @@
     align-items: center;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #F5EEDC;
+    background-color: #d9cebe;
     padding: 20px;
 }
 
 .register-container {
-    background-color: #F8F3E4; 
+    background-color: #efeae3;
     border-radius: 0.4rem;
     padding: 2rem;
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
@@ -29,14 +29,14 @@
     margin-bottom: 10px;
     padding-top: 40px;
     font-size: 2rem;
-    color: #333;
+    color: #443627;
     font-size: 2.6rem;
     font-weight: bold;
 }
 
 .register-desc {
     font-style: italic;
-    color: #333;
+    color: #443627;
     font-size: 1.2rem;
     margin-bottom: 50px;
 }
@@ -44,7 +44,7 @@
 
 .register-form-title {
     font-size: 1.5rem;
-    color: #333;
+    color: #443627;
     margin-bottom: 2rem;
 }
 
@@ -52,12 +52,12 @@
     display: block;
     padding: 16px 20px;
     margin: 20px 0px;
-    border: 1px solid #ccc;
+    border: none;
     border-radius: 0.25rem;
     font-size: 1rem;
     width: 100%;
-    color: #333;
-    background-color: #F8F3E4;
+    color: #443627;
+    background-color: #fdfdfc;
 }
 
 
@@ -67,7 +67,7 @@
     margin-top: 10px;
     font-size: 1rem;
     background-color: #BCA88D;
-    color: white;
+    color: #fdfdfc;
     border: none;
     border-radius: 0.25rem;
     cursor: pointer;

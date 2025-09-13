@@ -7,9 +7,6 @@ async function editBook(req, res) {
         const userId = req.user_id;
         const bookId = req.query.bookId;
 
-        console.log(userId)
-        console.log(bookId)
-
         // Check that user has that book
         const isUsersBook = await db('books').where({ book_id: bookId, user_id: userId }).first();
         if (!isUsersBook) {
@@ -85,7 +82,6 @@ async function editBook(req, res) {
         res.json({ message: 'Book updated successfully' });
 
     } catch (err) {
-        console.error('Error updating book:', err);
         res.status(500).json({error: 'Server error while updating book'});
     }
 

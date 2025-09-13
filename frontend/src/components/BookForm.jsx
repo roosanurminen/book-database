@@ -28,7 +28,6 @@ const BookForm = ({ bookDetails, handleChange, handleSubmit, isSeriesChecked, on
             className='book-form' 
             onSubmit={handleSubmit} 
             onKeyDown={(e) => {
-                console.log(e.key)
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     if (isEditMode) {

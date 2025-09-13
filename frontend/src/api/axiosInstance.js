@@ -21,7 +21,6 @@ axiosInstance.interceptors.response.use(
                 await axiosInstance.post('/refresh');
                 return axiosInstance(originalRequest);
             } catch (err) {
-                console.log("hallooo", err)
                 return Promise.reject(err);
             }   
         }

@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import axiosInstance from '../api/axiosInstance';
 import { useLocation, useNavigate  } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 //https://stackoverflow.com/questions/76448002/react-returns-the-login-page-by-default-if-the-user-isnt-authenticatied-if-i-su
 
@@ -27,16 +28,14 @@ export const AuthContextProvider = ({ children }) => {
 
         try {
             await axiosInstance.post('./logout');
-            console.log("Logged out")
         } catch (err) {
-            console.error('Error during logout:', err);
+            toast.error('Kirjautuminen ulos epäonnistui.', {autoClose: 3000});
         }
     };
     
     const checkAuth = async () => {
         try {
             const authRes = await axiosInstance.get('/check-auth');
-            console.log('checkAuth log', authRes);
 
             setAuthState({
                 isAuthenticated: true,

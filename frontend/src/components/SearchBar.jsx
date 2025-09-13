@@ -20,7 +20,6 @@ const SearchBar = ({ category, searchValue, handleInputChange, handleSearch }) =
                 }
                 disabled={category === 'all' || category === 'missing'}
                 onKeyDown={(e) => {
-                    console.log(e.key)
                     if (e.key === 'Enter') {
                         e.preventDefault();
                         if (category !== 'all' && category !== 'missing') {

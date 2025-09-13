@@ -18,23 +18,23 @@
     padding: 32px;
     width: 100%;
     max-width: 500px;
-    background-color: #fff;
-    border-radius: 0.5rem;
+    background-color: #fdfdfc;
+    border-radius: 0.4rem;
     max-height: 90vh;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     
 }
 
 .confirm-modal h3 {
     font-size: 24px;
-    color: #333;
+    color: #443627;
     font-family: Georgia, serif;
     margin-bottom: 26px;
 }
 
 .confirm-modal p {
     font-size: 16px;
-    color: #333;
+    color: #443627;
     font-family: Georgia, serif;
     margin-bottom: 24px;
 }
@@ -53,29 +53,32 @@
     border-radius: 0.4rem;
     font-size: 14px;
     padding: 12px;
-    color: #333;
+    color: #443627;
     background-color: transparent;
 }
 
 .confirm-modal .cancel-btn:hover {
-    background-color: #e0e0e0;
-    color: #333;
+    background-color: #e8e1d7;
+    color: #443627;
 }
 
 .confirm-modal .confirm-btn {
     cursor: pointer;
     border: none;
     font-family: Georgia, serif;
-    border-radius: 0.4rem;
+    border-radius: 0.25rem;
     font-size: 14px;
     padding: 12px;
-    color: white;
-    background-color: #ff9999; 
+    color: #fdfdfc;
+    background-color: #fb959c;
 }
 
 .confirm-modal .confirm-btn:hover {
-  background-color: #ff6666;
+    background-color: #ef5a6f;
+    color: #fdfdfc;
 }
+
+
 
 
 @media only screen and (max-width: 767px) {
@@ -95,11 +98,12 @@
     }
 
     .confirm-modal .confirm-btn:active, .confirm-modal .confirm-btn:focus {
-        background-color: #ff6666;
+        background-color: #ef5a6f;
+        color: #fdfdfc;
     }
 
     .confirm-modal .cancel-btn:active, .confirm-modal .cancel-btn:focus {
-        background-color: #e0e0e0;
+        background-color: #e8e1d7;
     }
 
     .confirm-modal h3 {

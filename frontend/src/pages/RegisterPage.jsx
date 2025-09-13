@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './RegisterPage.css'
+import { toast } from 'react-toastify';
 
 const RegisterPage = () => {
     const [name, setName] = useState("");
@@ -71,15 +72,13 @@ const RegisterPage = () => {
             const response = await axios.post('http://localhost:5000/api/register', requestBody, {
                 withCredentials: true,
             });
-            console.log("handleSubmit log", response);
             navigate('/login')
-        } catch (err) {
-            console.log("handleSubmit err:", err);
-
-            if (err.response && err.response.data?.message) {
-                setErrors(prev => ({ ...prev, email: err.response.data.message }));
+        } catch (error) {
+            if (error.response && error.response.data?.message) {
+                setErrors(prev => ({ ...prev, email: error.response.data.message }));
+                toast.error(error.response.data.message, {autoClose: 3000})
             } else {
-                alert('Tapahtui palvelinvirhe');
+                toast.error('Tapahtui palvelinvirhe', {autoClose: 3000});
             }
         }
     }
