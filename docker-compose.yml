@@ -2,7 +2,7 @@ services:
   database:
     image: postgres
     ports:
-      - "5432:5432"
+      - "5432:5432" # Maybe delete the whole ports part in prod
     restart: unless-stopped
     env_file:
       - .env
@@ -18,14 +18,31 @@ services:
   backend:
     build: ./backend
     ports:
-    - "5000:5000"  # delete later?
+    - "5000:5000"  # delete maybe this ports part wholely
     env_file: 
       - .env
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=development # change to NODE_ENV=production
     depends_on:
       - database
-    
-  
+
+  #Maybe uncomment this following frontend stuff:
+  #frontend:
+    #build: ./frontend
+    #depends_on:
+      #- backend
+
+  #Maybe uncomment this following nginx stuff:
+  #nginx:
+    #image: nginx:alpine
+    #ports:
+      #- "80:80"
+    #volumes:
+      #- ./nginx.conf:/etc/nginx/conf.d/default.conf
+    #depends_on:
+      #- frontend
+      #- backend
+
+ 
 volumes:
   pgdata:
