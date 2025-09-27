@@ -15,6 +15,8 @@ const { getMissingByAuthor, getMissingBySeries, getMissingByGroup } = require('.
 
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
+const isProd = process.env.NODE_ENV === 'production';
+
 // https://www.wisp.blog/blog/ultimate-guide-to-securing-jwt-authentication-with-httponly-cookies
 
 router.post('/api/register', async (req, res) => {
@@ -52,15 +54,15 @@ router.post('/api/login', async (req, res) => {
 
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            secure: false, // In production true
-            sameSite: 'lax', // In production strict
+            secure: isProd, // In production true
+            sameSite: isProd ? 'strict' : 'lax',
             maxAge: 300000 //5 min
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: false, // In production true
-            sameSite: 'lax', // In production strict
+            secure: isProd, // In production true
+            sameSite: isProd ? 'strict' : 'lax',
             path: '/api/refresh',
             maxAge: 172800000 //2 days
         });
@@ -90,8 +92,8 @@ router.post('/api/refresh', (req, res) => {
         // Set new access token cookie
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            secure: false, //True in production
-            sameSite: 'lax', // In production strict
+            secure: isProd, //True in production
+            sameSite: isProd ? 'strict' : 'lax',
             maxAge: 300000 //5 min
         });
 
@@ -115,14 +117,14 @@ router.get('/api/check-auth', authMiddleware, async (req, res) => {
 router.post('/api/logout', async (req, res) => {
     res.clearCookie('accessToken', {
         httpOnly: true,
-        secure: false,  // true production
-        sameSite: 'lax', // strict production
+        secure: isProd,  // true production
+        sameSite: isProd ? 'strict' : 'lax',
         path: '/'
     });
     res.clearCookie('refreshToken', { 
         httpOnly: true,
-        secure: false, // true production
-        sameSite: 'lax', // strict production
+        secure: isProd, // true production
+        sameSite: isProd ? 'strict' : 'lax',
         path: '/api/refresh'
     });
     res.json({message: 'Logged out succesfully'});

@@ -10,18 +10,15 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const app = express();
 const port = process.env.PORT || 5000;
 
+const FRONT_URL = process.env.NODE_ENV === 'production' ? process.env.VITE_API_URL : 'http://localhost:5173';
+
 // Middleware
 app.use(cookieParser());
 app.use(cors({
-    origin: ['http://localhost:5173'],
+    origin: FRONT_URL,
     credentials: true
 }));
 
-/* uncomment in prod and delete the upper one:
-app.use(cors({
-    origin: ['process.env.VITE_API_URL'], // or http://<your-server-ip> for testing
-    credentials: true
-}));*/
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
