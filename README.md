@@ -45,7 +45,7 @@ Create a .env file in the root directory with the following values:
 **docker ps**
 
 ### Connect to the database
-**docker exec -it <database-container-name> psql -U yourusername -d yourdb**
+**docker exec -it database-container-name psql -U yourusername -d yourdb**
 
 ## Run migrations and seed data
 **cd backend**<br>
