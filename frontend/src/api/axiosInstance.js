@@ -4,7 +4,7 @@ import axios from 'axios';
 // https://medium.com/@eric_abell/the-struggle-managing-access-and-refresh-tokens-in-web-apps-1bd70a3a6f01
 // https://stackoverflow.com/questions/75946973/how-to-run-axios-interceptor-once-for-multiple-request-on-401-error
 
-const baseURL = import.meta.env.VITE_API_URL || 'http://backend:5000/api';
+const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const axiosInstance = axios.create({
     baseURL,

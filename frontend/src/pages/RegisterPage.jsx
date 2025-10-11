@@ -4,6 +4,7 @@ import axios from 'axios';
 import './RegisterPage.css'
 import { toast } from 'react-toastify';
 
+
 const RegisterPage = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -70,7 +71,7 @@ const RegisterPage = () => {
         try {
             const requestBody = {name, email, password};
             const response = await axios.post('http://localhost:5000/api/register', requestBody, {
-                withCredentials: true,
+                withCredentials: true 
             });
             navigate('/login')
         } catch (error) {

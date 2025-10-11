@@ -4,7 +4,7 @@ body {
 
 .new-book-container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     min-height: 100vh;
     background-color: #d9cebe;

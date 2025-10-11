@@ -36,7 +36,7 @@ const HomePage = () => {
     
     const fetchAllBooks = async () => {
         try {
-            const response = await axiosInstance.get('http://localhost:5000/api/search/all');
+            const response = await axiosInstance.get('/search/all');
             setBooks({ books: response.data, authorName: '', seriesFull: [], missingBooks: [] });
             setHasSearched(false);
         } catch (err) {

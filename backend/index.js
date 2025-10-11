@@ -10,7 +10,7 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const app = express();
 const port = process.env.PORT || 5000;
 
-const FRONT_URL = process.env.NODE_ENV === 'production' ? process.env.VITE_API_URL : 'http://localhost:5173';
+const FRONT_URL = process.env.NODE_ENV === 'production' ? 'https://mydomain' : 'http://localhost:5173';
 
 // Middleware
 app.use(cookieParser());

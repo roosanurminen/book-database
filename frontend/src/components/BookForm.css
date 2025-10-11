@@ -248,8 +248,9 @@ input:disabled {
         padding: 1rem 1.5rem;
     }
 
-    .author-field {
-        grid-column: auto;
+    .basic-group {
+        display: flex;
+        flex-direction: column;
     }
 
     .author-btn {

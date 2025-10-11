@@ -50,7 +50,7 @@ const LoginPage = () => {
         try {
             const requestBody = {email, password};
             const response = await axios.post('http://localhost:5000/api/login', requestBody, {
-                withCredentials: true,
+                withCredentials: true 
             });
             setAuthState({
                 isAuthenticated: true,
@@ -60,7 +60,9 @@ const LoginPage = () => {
         } catch (error) {
             if (error.response && error.response.data?.message) {
                 setErrors(prev => ({ ...prev, err: error.response.data.message }));
-                toast.error(error.response.data.message, {autoClose: 3000})
+                if (error.response.status !== 401) {
+                    toast.error(error.response.data.message, {autoClose: 3000});
+                }
             } else {
                 toast.error('Tapahtui palvelinvirhe', {autoClose: 3000});
             }
