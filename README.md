@@ -54,9 +54,9 @@ Create a .env file in the root directory with the following values:
 
 ## Test accounts
 You can log in using any of the following pre-configured test users:<br>
-- elli@gmail.com
-- kalle@gmail.com
-- sulo@gmail.com
+- testi1@gmail.com
+- testi2@gmail.com
+- testi3@gmail.com
 
 All test accounts use the same password: Password1!
 
